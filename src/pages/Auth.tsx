@@ -56,33 +56,37 @@ export default function Auth() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      const { error } = isSignUp
-        ? await supabase.auth.signUp({
-            email: values.email,
-            password: values.password,
-            options: {
-              data: {
-                first_name: values.firstName,
-                last_name: values.lastName,
-                role: values.role,
-                practice_name: values.practiceName,
-              },
-            },
-          })
-        : await supabase.auth.signInWithPassword({
-            email: values.email,
-            password: values.password,
-          })
-
-      if (error) throw error
-
       if (isSignUp) {
+        const { error: signUpError } = await supabase.auth.signUp({
+          email: values.email,
+          password: values.password,
+          options: {
+            data: {
+              first_name: values.firstName,
+              last_name: values.lastName,
+              role: values.role,
+              practice_name: values.practiceName,
+            },
+          },
+        })
+
+        if (signUpError) throw signUpError
+
         toast({
           title: "Check your email",
           description: "We sent you a confirmation link.",
         })
       } else {
-        navigate("/")
+        const { error: signInError, data } = await supabase.auth.signInWithPassword({
+          email: values.email,
+          password: values.password,
+        })
+
+        if (signInError) throw signInError
+
+        if (data.session) {
+          navigate("/programs")
+        }
       }
     } catch (error) {
       toast({
