@@ -8,8 +8,9 @@ import { AchievementList } from "@/components/goals/AchievementList"
 const Goals = () => {
   const { refetch: refetchGoals } = useQuery({
     queryKey: ["goals"],
-    queryFn: async () => null,
-    enabled: false
+    queryFn: async () => {
+      return null
+    }
   })
 
   return (

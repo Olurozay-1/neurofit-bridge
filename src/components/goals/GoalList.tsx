@@ -53,6 +53,17 @@ export const GoalList = ({ onGoalUpdate }: GoalListProps) => {
     }
   }
 
+  if (!goals?.length) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <h2 className="text-xl font-semibold mb-2">Active Goals</h2>
+          <p className="text-gray-600">No goals yet. Create one to get started!</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -64,7 +75,7 @@ export const GoalList = ({ onGoalUpdate }: GoalListProps) => {
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="font-semibold text-lg">{goal.title}</h3>
-                  <p className="text-gray-600 text-sm">{goal.target_date}</p>
+                  <p className="text-gray-600 text-sm">Target: {new Date(goal.target_date).toLocaleDateString()}</p>
                 </div>
                 <Button
                   variant="ghost"
