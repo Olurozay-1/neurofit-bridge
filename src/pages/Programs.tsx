@@ -30,6 +30,12 @@ interface Exercise {
   exercise_type: string
 }
 
+interface ProgramRecommendations {
+  focus_areas: string[]
+  frequency_advice: string
+  daily_tips: string[]
+}
+
 export default function Programs() {
   const navigate = useNavigate()
 
@@ -46,6 +52,20 @@ export default function Programs() {
     },
   })
 
+  const { data: recommendations, isLoading: isRecommendationsLoading } = useQuery({
+    queryKey: ["program_recommendations"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("program_recommendations")
+        .select("*")
+        .maybeSingle()
+
+      if (error) throw error
+      return data as ProgramRecommendations
+    },
+    enabled: Boolean(bioData?.bio_summary),
+  })
+
   const { data: exercises, isLoading: isExercisesLoading } = useQuery({
     queryKey: ["exercises"],
     queryFn: async () => {
@@ -60,7 +80,24 @@ export default function Programs() {
     enabled: Boolean(bioData?.bio_summary),
   })
 
+  const { data: quote } = useQuery({
+    queryKey: ["daily_quote"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("daily_quotes")
+        .select("*")
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (error) throw error
+      return data
+    },
+    enabled: Boolean(bioData?.bio_summary),
+  })
+
   const hasBio = Boolean(bioData?.bio_summary)
+  const hasProgram = Boolean(recommendations)
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -86,14 +123,50 @@ export default function Programs() {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50">
-                    Create Program
+                    {hasProgram ? "View Program" : "Create Program"}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[600px]">
+                <DialogContent className="sm:max-w-[800px]">
                   <DialogHeader>
-                    <DialogTitle>Create New Program</DialogTitle>
+                    <DialogTitle>
+                      {hasProgram ? "Your Personalized Program" : "Create New Program"}
+                    </DialogTitle>
                   </DialogHeader>
-                  <CreateProgramForm />
+                  {hasProgram ? (
+                    <div className="space-y-6">
+                      <section>
+                        <h3 className="text-lg font-semibold mb-3">Focus Areas</h3>
+                        <ul className="list-disc pl-5 space-y-1">
+                          {recommendations.focus_areas.map((area, index) => (
+                            <li key={index} className="text-gray-700">{area}</li>
+                          ))}
+                        </ul>
+                      </section>
+
+                      <section>
+                        <h3 className="text-lg font-semibold mb-3">Exercise Frequency</h3>
+                        <p className="text-gray-700">{recommendations.frequency_advice}</p>
+                      </section>
+
+                      <section>
+                        <h3 className="text-lg font-semibold mb-3">Daily Tips for Staying Active</h3>
+                        <ul className="list-disc pl-5 space-y-1">
+                          {recommendations.daily_tips.map((tip, index) => (
+                            <li key={index} className="text-gray-700">{tip}</li>
+                          ))}
+                        </ul>
+                      </section>
+
+                      {quote && (
+                        <section className="bg-blue-50 p-4 rounded-lg">
+                          <h3 className="text-lg font-semibold mb-2">Your Daily Motivation</h3>
+                          <p className="text-gray-700 italic">{quote.quote}</p>
+                        </section>
+                      )}
+                    </div>
+                  ) : (
+                    <CreateProgramForm />
+                  )}
                 </DialogContent>
               </Dialog>
             ) : (
