@@ -79,7 +79,7 @@ export default function Chat() {
           <h1 className="text-[32px] font-bold text-[#1A56DB] mb-4">
             How can I help you today?
           </h1>
-          <p className="text-gray-600 text-lg max-w-xl mx-auto px-4 font-medium">
+          <p className="text-gray-600 text-lg max-w-xl mx-auto px-4">
             I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
           </p>
         </div>
