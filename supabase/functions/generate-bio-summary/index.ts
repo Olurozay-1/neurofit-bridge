@@ -14,7 +14,7 @@ serve(async (req) => {
   }
 
   try {
-    const { bioData } = await req.json()
+    const { bioData, userId } = await req.json()
     
     // Create OpenAI prompt from bio data
     const prompt = `Please summarize the following health information concisely:
@@ -58,7 +58,7 @@ serve(async (req) => {
     const { error: updateError } = await supabaseClient
       .from('user_bios')
       .update({ bio_summary: summary })
-      .eq('user_id', req.headers.get('Authorization')?.split('Bearer ')[1])
+      .eq('user_id', userId)
 
     if (updateError) throw updateError
 
