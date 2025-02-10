@@ -12,10 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 
 interface Goal {
@@ -196,38 +196,53 @@ const Goals = () => {
                 <Plus className="mr-2 h-4 w-4" /> Add New Goal
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-md">
               <DialogHeader>
-                <DialogTitle>Create New Goal</DialogTitle>
+                <DialogTitle className="text-xl">Create a New Goal</DialogTitle>
               </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    value={newGoal.title}
-                    onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
-                  />
+              <div className="py-4">
+                <p className="text-gray-600 mb-6">Set a meaningful goal that you can track and achieve.</p>
+                <div className="space-y-6">
+                  <div>
+                    <Label htmlFor="title" className="text-base font-medium">What would you like to achieve?</Label>
+                    <Input
+                      id="title"
+                      placeholder="E.g., Walk 30 minutes daily"
+                      value={newGoal.title}
+                      onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
+                      className="mt-2"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="description" className="text-base font-medium">Description (Optional)</Label>
+                    <Input
+                      id="description"
+                      value={newGoal.description}
+                      onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
+                      className="mt-2"
+                      placeholder="Add some details about your goal"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="target" className="text-base font-medium">Target Count</Label>
+                    <Input
+                      id="target"
+                      type="number"
+                      min="1"
+                      value={newGoal.target_count}
+                      onChange={(e) => setNewGoal({ ...newGoal, target_count: parseInt(e.target.value) })}
+                      className="mt-2"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={newGoal.description}
-                    onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="target">Target Count</Label>
-                  <Input
-                    id="target"
-                    type="number"
-                    min="1"
-                    value={newGoal.target_count}
-                    onChange={(e) => setNewGoal({ ...newGoal, target_count: parseInt(e.target.value) })}
-                  />
-                </div>
-                <Button onClick={handleNewGoal} className="w-full bg-blue-600 hover:bg-blue-700">Create Goal</Button>
+              </div>
+              <div className="flex gap-3 justify-end">
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button onClick={handleNewGoal} className="bg-blue-600 hover:bg-blue-700">
+                  Create Goal
+                </Button>
               </div>
             </DialogContent>
           </Dialog>
