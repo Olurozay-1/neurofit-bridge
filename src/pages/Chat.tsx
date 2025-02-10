@@ -50,13 +50,12 @@ export default function Chat() {
       const { data, error } = await supabase.functions.invoke('chat', {
         body: { 
           prompt: userMessage,
-          userId: userId // Pass the user ID to provide context
+          userId: userId
         }
       })
 
       if (error) throw error
 
-      // Add AI response to chat
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: data.generatedText }
@@ -74,50 +73,18 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-blue-600">
+    <div className="flex flex-col h-screen bg-white">
       <div className="container mx-auto px-4 py-8 max-w-3xl flex-1 flex flex-col">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Hi {userName}, how can I help you today?
+        <div className="mb-8">
+          <h1 className="text-[32px] font-medium text-[#1A56DB] mb-2">
+            Hi, how can I help you today?
           </h1>
+          <p className="text-gray-600 text-base">
+            I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
+          </p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-6">
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask anything..."
-              className="flex-1 bg-transparent text-white placeholder:text-white/70 border-white/20"
-            />
-            <Button type="submit" variant="ghost" className="text-white" disabled={isLoading}>
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-            </Button>
-          </form>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <Button 
-            variant="outline" 
-            className="bg-white hover:bg-white/90 text-blue-600 p-6 h-auto flex flex-col items-center gap-2"
-          >
-            <Upload className="h-6 w-6" />
-            <span className="font-semibold">Upload Exercise Video</span>
-          </Button>
-          <Button 
-            variant="outline" 
-            className="bg-white hover:bg-white/90 text-blue-600 p-6 h-auto flex flex-col items-center gap-2"
-          >
-            <Mic className="h-6 w-6" />
-            <span className="font-semibold">Record Voice Message</span>
-          </Button>
-        </div>
-
-        <ScrollArea className="flex-1 px-4">
+        <ScrollArea className="flex-1">
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div
@@ -127,10 +94,10 @@ export default function Chat() {
                 }`}
               >
                 <div
-                  className={`max-w-[85%] px-4 py-3 rounded-2xl ${
+                  className={`max-w-[85%] px-4 py-3 rounded-lg ${
                     message.role === "user"
-                      ? "bg-white text-blue-600"
-                      : "bg-white/10 text-white"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-900"
                   }`}
                 >
                   {message.role === "user" ? (
@@ -145,7 +112,7 @@ export default function Chat() {
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-white/10 px-4 py-3 rounded-2xl flex items-center gap-2 text-white">
+                <div className="bg-gray-100 px-4 py-3 rounded-lg flex items-center gap-2 text-gray-900">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="text-sm">NeuroPT is thinking...</span>
                 </div>
@@ -153,6 +120,46 @@ export default function Chat() {
             )}
           </div>
         </ScrollArea>
+
+        <div className="mt-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <Button 
+              variant="outline" 
+              className="bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white p-6 h-auto flex items-center justify-center gap-2 rounded-lg"
+            >
+              <Upload className="h-5 w-5" />
+              Upload Video
+            </Button>
+            <Button 
+              variant="outline" 
+              className="bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white p-6 h-auto flex items-center justify-center gap-2 rounded-lg"
+            >
+              <Mic className="h-5 w-5" />
+              Record Voice
+            </Button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask anything..."
+              className="flex-1 border border-gray-200 rounded-full placeholder:text-gray-400"
+            />
+            <Button 
+              type="submit" 
+              size="icon"
+              className="rounded-full bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   )
