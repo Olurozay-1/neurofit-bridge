@@ -73,20 +73,20 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl flex-1 flex flex-col">
-        <div className="text-center mb-4">
-          <h1 className="text-[32px] font-bold text-[#1A56DB] mb-2">
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl h-full flex flex-col">
+        <div className="text-center mb-2">
+          <h1 className="text-[28px] font-bold text-[#1A56DB] mb-1">
             How can I help you today?
           </h1>
-          <p className="text-gray-600 text-lg max-w-xl mx-auto">
+          <p className="text-gray-600 text-base max-w-xl mx-auto">
             I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
           </p>
         </div>
 
-        <div className="flex-1 flex flex-col min-h-0">
-          <ScrollArea className="flex-1 px-2">
-            <div className="space-y-4 mb-4">
+        <div className="flex-1 min-h-0 mb-2">
+          <ScrollArea className="h-full px-2">
+            <div className="space-y-3">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -95,7 +95,7 @@ export default function Chat() {
                   }`}
                 >
                   <div
-                    className={`max-w-[85%] px-5 py-3.5 rounded-2xl ${
+                    className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                       message.role === "user"
                         ? "bg-blue-600 text-white"
                         : "bg-gray-100 text-gray-900"
@@ -123,18 +123,18 @@ export default function Chat() {
           </ScrollArea>
         </div>
 
-        <div className="mt-4 space-y-4 py-4 bg-white">
+        <div className="mt-auto space-y-3 py-2 bg-white">
           <div className="grid grid-cols-2 gap-3">
             <Button 
               variant="outline" 
-              className="h-11 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
+              className="h-10 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
             >
               <Upload className="h-4 w-4 mr-2" />
               Upload Video
             </Button>
             <Button 
               variant="outline" 
-              className="h-11 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
+              className="h-10 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
             >
               <Mic className="h-4 w-4 mr-2" />
               Record Voice
@@ -146,12 +146,12 @@ export default function Chat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask anything..."
-              className="flex-1 h-11 border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400"
+              className="flex-1 h-10 border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400"
             />
             <Button 
               type="submit" 
               size="icon"
-              className="h-11 w-11 rounded-xl bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white shadow-sm"
+              className="h-10 w-10 rounded-xl bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white shadow-sm"
               disabled={isLoading}
             >
               {isLoading ? (
