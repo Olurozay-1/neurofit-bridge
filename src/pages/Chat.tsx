@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -17,7 +17,19 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [userName, setUserName] = useState("")
   const { toast } = useToast()
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user?.user_metadata?.full_name) {
+        const firstName = session.user.user_metadata.full_name.split(' ')[0]
+        setUserName(firstName)
+      }
+    }
+    fetchUserName()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -62,14 +74,50 @@ export default function Chat() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <div className="flex flex-col h-[calc(100vh-12rem)] bg-background rounded-xl border shadow-sm">
-        <div className="flex items-center gap-2 px-6 py-4 border-b">
-          <MessageSquare className="h-5 w-5 text-blue-600" />
-          <h1 className="text-lg font-semibold">Chat with NeuroPT</h1>
+    <div className="flex flex-col h-screen bg-blue-600">
+      <div className="container mx-auto px-4 py-8 max-w-3xl flex-1 flex flex-col">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">
+            Hi {userName}, how can I help you today?
+          </h1>
         </div>
 
-        <ScrollArea className="flex-1 px-6 py-4">
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-6">
+          <form onSubmit={handleSubmit} className="flex gap-2">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask anything..."
+              className="flex-1 bg-transparent text-white placeholder:text-white/70 border-white/20"
+            />
+            <Button type="submit" variant="ghost" className="text-white" disabled={isLoading}>
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </form>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <Button 
+            variant="outline" 
+            className="bg-white hover:bg-white/90 text-blue-600 p-6 h-auto flex flex-col items-center gap-2"
+          >
+            <Upload className="h-6 w-6" />
+            <span className="font-semibold">Upload Exercise Video</span>
+          </Button>
+          <Button 
+            variant="outline" 
+            className="bg-white hover:bg-white/90 text-blue-600 p-6 h-auto flex flex-col items-center gap-2"
+          >
+            <Mic className="h-6 w-6" />
+            <span className="font-semibold">Record Voice Message</span>
+          </Button>
+        </div>
+
+        <ScrollArea className="flex-1 px-4">
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div
@@ -81,8 +129,8 @@ export default function Chat() {
                 <div
                   className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                     message.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-800"
+                      ? "bg-white text-blue-600"
+                      : "bg-white/10 text-white"
                   }`}
                 >
                   {message.role === "user" ? (
@@ -97,7 +145,7 @@ export default function Chat() {
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 dark:bg-gray-800 px-4 py-3 rounded-2xl flex items-center gap-2">
+                <div className="bg-white/10 px-4 py-3 rounded-2xl flex items-center gap-2 text-white">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="text-sm">NeuroPT is thinking...</span>
                 </div>
@@ -105,36 +153,6 @@ export default function Chat() {
             )}
           </div>
         </ScrollArea>
-
-        <div className="p-4 border-t space-y-4">
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button variant="outline" className="w-full sm:flex-1 bg-green-500 hover:bg-green-600 text-white">
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Exercise Video
-            </Button>
-            <Button variant="outline" className="w-full sm:flex-1 bg-purple-500 hover:bg-purple-600 text-white">
-              <Mic className="h-4 w-4 mr-2" />
-              Record Voice Message
-            </Button>
-          </div>
-
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-1"
-              disabled={isLoading}
-            />
-            <Button type="submit" disabled={isLoading || !input.trim()}>
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-            </Button>
-          </form>
-        </div>
       </div>
     </div>
   )
