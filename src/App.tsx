@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { supabase } from "./integrations/supabase/client"
 import { Header } from "./components/layout/Header"
+import { Footer } from "./components/layout/Footer"
 import Auth from "./pages/Auth"
 import Index from "./pages/Index"
 import NotFound from "./pages/NotFound"
@@ -38,7 +39,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="relative flex min-h-screen flex-col pb-16 md:pb-0">
+          <div className="relative flex min-h-screen flex-col pb-32 md:pb-16">
             {session && <Header />}
             <Routes>
               <Route
@@ -83,6 +84,7 @@ const App = () => {
               />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            {session && <Footer />}
           </div>
         </BrowserRouter>
       </TooltipProvider>
