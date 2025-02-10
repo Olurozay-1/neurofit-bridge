@@ -140,6 +140,9 @@ const Goals = () => {
   }
 
   const handleProgress = async (goalId: string, currentCount: number, targetCount: number) => {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+
     const { error } = await supabase
       .from('goals')
       .update({ current_count: currentCount + 1 })
@@ -147,11 +150,12 @@ const Goals = () => {
 
     if (!error) {
       if (currentCount + 1 === targetCount) {
-        // Create achievement
+        // Create achievement with user_id
         await supabase
           .from('achievements')
           .insert({
             goal_id: goalId,
+            user_id: session.user.id,
             title: "Goal Achieved!",
             description: "Congratulations on reaching your goal!",
           })
