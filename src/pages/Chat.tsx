@@ -73,20 +73,20 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-white">
+    <div className="h-screen bg-white flex flex-col">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl h-full flex flex-col">
-        <div className="text-center pt-4 mb-1">
-          <h1 className="text-[28px] font-bold text-[#1A56DB] mb-0.5">
+        <div className="text-center pt-2">
+          <h1 className="text-2xl font-bold text-[#1A56DB]">
             How can I help you today?
           </h1>
-          <p className="text-gray-600 text-base max-w-xl mx-auto">
+          <p className="text-gray-600 text-sm mx-auto">
             I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
           </p>
         </div>
 
-        <div className="flex-1 min-h-0 mb-1">
-          <ScrollArea className="h-full px-2">
-            <div className="space-y-2">
+        <div className="flex-1 min-h-0 mt-2">
+          <ScrollArea className="h-full">
+            <div className="space-y-2 px-2">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -95,7 +95,7 @@ export default function Chat() {
                   }`}
                 >
                   <div
-                    className={`max-w-[85%] px-4 py-3 rounded-2xl ${
+                    className={`max-w-[85%] px-3 py-2 rounded-2xl ${
                       message.role === "user"
                         ? "bg-blue-600 text-white"
                         : "bg-gray-100 text-gray-900"
@@ -113,7 +113,7 @@ export default function Chat() {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 px-4 py-3 rounded-2xl flex items-center gap-2 text-gray-900">
+                  <div className="bg-gray-100 px-3 py-2 rounded-2xl flex items-center gap-2 text-gray-900">
                     <Loader2 className="h-4 w-4 animate-spin" />
                     <span className="text-sm">NeuroPT is thinking...</span>
                   </div>
@@ -123,18 +123,18 @@ export default function Chat() {
           </ScrollArea>
         </div>
 
-        <div className="mt-auto space-y-2 py-2 bg-white">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="py-2 bg-white space-y-2">
+          <div className="grid grid-cols-2 gap-2">
             <Button 
               variant="outline" 
-              className="h-10 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
+              className="h-9 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
             >
               <Upload className="h-4 w-4 mr-2" />
               Upload Video
             </Button>
             <Button 
               variant="outline" 
-              className="h-10 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
+              className="h-9 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
             >
               <Mic className="h-4 w-4 mr-2" />
               Record Voice
@@ -146,12 +146,12 @@ export default function Chat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask anything..."
-              className="flex-1 h-10 border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400"
+              className="h-9 border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400"
             />
             <Button 
               type="submit" 
               size="icon"
-              className="h-10 w-10 rounded-xl bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white shadow-sm"
+              className="h-9 w-9 rounded-xl bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white shadow-sm"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -164,5 +164,5 @@ export default function Chat() {
         </div>
       </div>
     </div>
-  );
+  )
 }
