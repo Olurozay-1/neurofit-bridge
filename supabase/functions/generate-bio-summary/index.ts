@@ -32,7 +32,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',  // Fixed model name
         messages: [
           {
             role: 'system',
@@ -45,6 +45,12 @@ serve(async (req) => {
         ],
       }),
     })
+
+    if (!openAIResponse.ok) {
+      const error = await openAIResponse.json()
+      console.error('OpenAI API Error:', error)
+      throw new Error('Failed to generate summary')
+    }
 
     const openAIData = await openAIResponse.json()
     const summary = openAIData.choices[0].message.content
