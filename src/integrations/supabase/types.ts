@@ -68,6 +68,45 @@ export type Database = {
         }
         Relationships: []
       }
+      exercises: {
+        Row: {
+          created_at: string
+          description: string
+          duration: string
+          exercise_type: string
+          id: string
+          instructions: string[]
+          level: string
+          repetitions: string
+          safety_notes: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          duration: string
+          exercise_type: string
+          id?: string
+          instructions: string[]
+          level: string
+          repetitions: string
+          safety_notes: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          duration?: string
+          exercise_type?: string
+          id?: string
+          instructions?: string[]
+          level?: string
+          repetitions?: string
+          safety_notes?: string
+          title?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string

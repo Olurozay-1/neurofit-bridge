@@ -8,15 +8,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import { CreateProgramForm } from "@/components/programs/CreateProgramForm"
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { useNavigate } from "react-router-dom"
 
+interface Exercise {
+  id: string
+  title: string
+  description: string
+  instructions: string[]
+  duration: string
+  level: string
+  repetitions: string
+  safety_notes: string
+  exercise_type: string
+}
+
 export default function Programs() {
   const navigate = useNavigate()
 
-  const { data: bioData, isLoading } = useQuery({
+  const { data: bioData, isLoading: isBioLoading } = useQuery({
     queryKey: ["bio"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,6 +44,20 @@ export default function Programs() {
       if (error) throw error
       return data
     },
+  })
+
+  const { data: exercises, isLoading: isExercisesLoading } = useQuery({
+    queryKey: ["exercises"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("exercises")
+        .select("*")
+        .order('created_at', { ascending: true })
+
+      if (error) throw error
+      return data as Exercise[]
+    },
+    enabled: Boolean(bioData?.bio_summary),
   })
 
   const hasBio = Boolean(bioData?.bio_summary)
@@ -90,51 +121,85 @@ export default function Programs() {
           </nav>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <ExerciseCard
-            title="Walking"
-            description="A simple, low-impact exercise to help with overall mobility. Walk at a comfortable pace in a flat, safe area."
-            duration="10 mins"
-            level="Beginner"
-          />
-          <ExerciseCard
-            title="Chair Yoga"
-            description="A seated yoga routine focusing on gentle stretching and relaxation to enhance flexibility and relieve tension."
-            duration="15 mins"
-            level="Beginner"
-          />
-          <ExerciseCard
-            title="Seated Marching"
-            description="While seated, lift knees alternately as if marching in place to promote circulation and joint movement."
-            duration="10 mins"
-            level="Beginner"
-          />
-        </div>
+        {!hasBio ? (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Complete Your Health Bio For Tailored Exercises
+            </h3>
+            <p className="text-gray-600">
+              We'll customize exercises based on your specific needs and goals.
+            </p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-6">
+            {isExercisesLoading ? (
+              <div className="col-span-2 text-center py-12">
+                <p className="text-gray-600">Loading exercises...</p>
+              </div>
+            ) : exercises && exercises.length > 0 ? (
+              exercises.map((exercise) => (
+                <ExerciseCard key={exercise.id} {...exercise} />
+              ))
+            ) : (
+              <div className="col-span-2 text-center py-12">
+                <p className="text-gray-600">No exercises available yet.</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-function ExerciseCard({ title, description, duration, level }: {
-  title: string
-  description: string
-  duration: string
-  level: string
-}) {
+function ExerciseCard({ 
+  title, 
+  description, 
+  duration, 
+  level,
+  instructions,
+  repetitions,
+  safety_notes 
+}: Exercise) {
   return (
     <Card>
       <CardContent className="p-6">
         <h3 className="text-xl font-semibold text-blue-600 mb-2">{title}</h3>
         <p className="text-gray-600 mb-4">{description}</p>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center text-gray-500 text-sm">
             <span>{duration}</span>
           </div>
           <span className="text-blue-600 text-sm">{level}</span>
         </div>
-        <Button variant="outline" className="w-full mt-4">
-          View Exercise
-        </Button>
+        
+        <Collapsible>
+          <CollapsibleTrigger asChild>
+            <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
+              View Exercise
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-4 space-y-4">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Instructions:</h4>
+              <ol className="list-decimal pl-4 space-y-2">
+                {instructions.map((step, index) => (
+                  <li key={index} className="text-gray-600">{step}</li>
+                ))}
+              </ol>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Repetitions:</h4>
+              <p className="text-gray-600">{repetitions}</p>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Safety Notice:</h4>
+              <p className="text-gray-600">{safety_notes}</p>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </CardContent>
     </Card>
   )
