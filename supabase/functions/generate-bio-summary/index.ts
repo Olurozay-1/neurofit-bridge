@@ -14,7 +14,13 @@ serve(async (req) => {
   }
 
   try {
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY')
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key not found')
+    }
+
     const { bioData, userId } = await req.json()
+    console.log('Processing bio data for user:', userId)
     
     // Create OpenAI prompt for bio summary
     const bioPrompt = `Please summarize the following health information concisely:
@@ -44,15 +50,16 @@ serve(async (req) => {
     About Me: ${bioData.aboutMe}
     Situation: ${bioData.situation}`
 
+    console.log('Generating bio summary...')
     // Generate bio summary using OpenAI
     const bioResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -68,18 +75,20 @@ serve(async (req) => {
 
     if (!bioResponse.ok) {
       const error = await bioResponse.json()
-      throw new Error(`OpenAI API error: ${JSON.stringify(error)}`)
+      console.error('OpenAI Bio API error:', error)
+      throw new Error(`OpenAI Bio API error: ${JSON.stringify(error)}`)
     }
 
+    console.log('Generating program recommendations...')
     // Generate program recommendations using OpenAI
     const programResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -95,18 +104,20 @@ serve(async (req) => {
 
     if (!programResponse.ok) {
       const error = await programResponse.json()
-      throw new Error(`OpenAI API error: ${JSON.stringify(error)}`)
+      console.error('OpenAI Program API error:', error)
+      throw new Error(`OpenAI Program API error: ${JSON.stringify(error)}`)
     }
 
+    console.log('Generating motivational quote...')
     // Generate motivational quote using OpenAI
     const quoteResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -122,7 +133,8 @@ serve(async (req) => {
 
     if (!quoteResponse.ok) {
       const error = await quoteResponse.json()
-      throw new Error(`OpenAI API error: ${JSON.stringify(error)}`)
+      console.error('OpenAI Quote API error:', error)
+      throw new Error(`OpenAI Quote API error: ${JSON.stringify(error)}`)
     }
 
     const bioData = await bioResponse.json()
@@ -133,20 +145,26 @@ serve(async (req) => {
     const recommendations = JSON.parse(programData.choices[0].message.content)
     const quote = quoteData.choices[0].message.content
 
+    console.log('Initializing Supabase client...')
     // Initialize Supabase client
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
+    console.log('Saving bio summary...')
     // Save the bio summary
     const { error: bioError } = await supabaseClient
       .from('user_bios')
       .update({ bio_summary: summary })
       .eq('user_id', userId)
 
-    if (bioError) throw bioError
+    if (bioError) {
+      console.error('Bio save error:', bioError)
+      throw bioError
+    }
 
+    console.log('Saving program recommendations...')
     // Save the program recommendations
     const { error: programError } = await supabaseClient
       .from('program_recommendations')
@@ -157,8 +175,12 @@ serve(async (req) => {
         daily_tips: recommendations.daily_tips
       })
 
-    if (programError) throw programError
+    if (programError) {
+      console.error('Program save error:', programError)
+      throw programError
+    }
 
+    console.log('Saving daily quote...')
     // Save the daily quote
     const { error: quoteError } = await supabaseClient
       .from('daily_quotes')
@@ -168,14 +190,18 @@ serve(async (req) => {
         date: new Date().toISOString().split('T')[0]
       })
 
-    if (quoteError) throw quoteError
+    if (quoteError) {
+      console.error('Quote save error:', quoteError)
+      throw quoteError
+    }
 
+    console.log('All operations completed successfully')
     return new Response(
       JSON.stringify({ success: true }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error in generate-bio-summary:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
