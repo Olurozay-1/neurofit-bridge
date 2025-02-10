@@ -33,7 +33,7 @@ export function ProgramHeader({ hasBio, hasProgram, onViewProgram }: ProgramHead
               className="bg-white text-blue-600 hover:bg-blue-50"
               onClick={onViewProgram}
             >
-              {hasProgram ? "View Program" : "Create Program"}
+              View Program
             </Button>
           ) : (
             <Button 

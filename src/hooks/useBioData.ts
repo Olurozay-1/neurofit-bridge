@@ -50,11 +50,18 @@ export function useBioData() {
       })
 
       if (summaryError) throw summaryError
+
+      // Generate exercises and program
+      const { error: exercisesError } = await supabase.functions.invoke("generate-exercises", {
+        body: { bioData: values, userId }
+      })
+
+      if (exercisesError) throw exercisesError
     },
     onSuccess: () => {
       toast({
         title: "Success",
-        description: "Your bio has been saved.",
+        description: "Your bio has been saved and your personalized program has been created.",
       })
       refetch()
     },
