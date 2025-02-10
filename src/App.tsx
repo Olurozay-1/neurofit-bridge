@@ -10,6 +10,7 @@ import { Header } from "./components/layout/Header"
 import Auth from "./pages/Auth"
 import Index from "./pages/Index"
 import NotFound from "./pages/NotFound"
+import Programs from "./pages/Programs"
 
 const queryClient = new QueryClient()
 
@@ -44,6 +45,16 @@ const App = () => {
                 element={
                   session ? (
                     <Index />
+                  ) : (
+                    <Navigate to="/auth" replace />
+                  )
+                }
+              />
+              <Route
+                path="/programs"
+                element={
+                  session ? (
+                    <Programs />
                   ) : (
                     <Navigate to="/auth" replace />
                   )
