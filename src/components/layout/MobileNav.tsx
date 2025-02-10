@@ -2,9 +2,8 @@
 import { Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { Link } from "react-router-dom"
-import { Brain, BarChart3, Target, FileText, MessageSquare } from "lucide-react"
+import { Brain, Target, FileText, MessageSquare } from "lucide-react"
 
 export function MobileNav() {
   const menuItems = [
@@ -27,12 +26,6 @@ export function MobileNav() {
       description: "Track your progress and goals",
     },
     {
-      title: "My Progress",
-      href: "/progress",
-      icon: BarChart3,
-      description: "View your progress over time",
-    },
-    {
       title: "Documents",
       href: "/documents",
       icon: FileText,
@@ -49,6 +42,12 @@ export function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left">
+        <div className="flex items-center space-x-3 mb-8">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+            <span className="text-sm font-bold text-white">NPT</span>
+          </div>
+          <span className="font-bold">NeuroPT</span>
+        </div>
         <nav className="flex flex-col gap-4">
           {menuItems.map((item) => (
             <Link

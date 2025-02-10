@@ -8,7 +8,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { Brain, BarChart3, Target, FileText, MessageSquare } from "lucide-react"
+import { Brain, Target, FileText, MessageSquare } from "lucide-react"
 
 export function MainNav() {
   const menuItems = [
@@ -29,12 +29,6 @@ export function MainNav() {
       href: "/goals",
       icon: Target,
       description: "Track your progress and goals",
-    },
-    {
-      title: "My Progress",
-      href: "/progress",
-      icon: BarChart3,
-      description: "View your progress over time",
     },
     {
       title: "Documents",

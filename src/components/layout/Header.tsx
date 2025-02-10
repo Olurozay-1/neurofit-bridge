@@ -18,9 +18,12 @@ export function Header() {
       <div className="container flex h-14 items-center">
         <MobileNav />
         <div className="mr-4 hidden md:flex">
-          <div className="mr-6 flex items-center space-x-2">
+          <div className="mr-6 flex items-center space-x-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+              <span className="text-sm font-bold text-white">NPT</span>
+            </div>
             <span className="hidden font-bold sm:inline-block">
-              NeuroFit Bridge
+              NeuroPT
             </span>
           </div>
           <MainNav />
