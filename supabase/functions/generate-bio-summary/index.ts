@@ -66,6 +66,11 @@ serve(async (req) => {
       }),
     })
 
+    if (!bioResponse.ok) {
+      const error = await bioResponse.json()
+      throw new Error(`OpenAI API error: ${JSON.stringify(error)}`)
+    }
+
     // Generate program recommendations using OpenAI
     const programResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -88,6 +93,11 @@ serve(async (req) => {
       }),
     })
 
+    if (!programResponse.ok) {
+      const error = await programResponse.json()
+      throw new Error(`OpenAI API error: ${JSON.stringify(error)}`)
+    }
+
     // Generate motivational quote using OpenAI
     const quoteResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -109,6 +119,11 @@ serve(async (req) => {
         ],
       }),
     })
+
+    if (!quoteResponse.ok) {
+      const error = await quoteResponse.json()
+      throw new Error(`OpenAI API error: ${JSON.stringify(error)}`)
+    }
 
     const bioData = await bioResponse.json()
     const programData = await programResponse.json()
