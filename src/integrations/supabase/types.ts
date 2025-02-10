@@ -130,6 +130,7 @@ export type Database = {
       }
       user_bios: {
         Row: {
+          bio_summary: string | null
           created_at: string
           diagnosis_date: string | null
           has_seen_physio: boolean | null
@@ -141,6 +142,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          bio_summary?: string | null
           created_at?: string
           diagnosis_date?: string | null
           has_seen_physio?: boolean | null
@@ -152,6 +154,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          bio_summary?: string | null
           created_at?: string
           diagnosis_date?: string | null
           has_seen_physio?: boolean | null

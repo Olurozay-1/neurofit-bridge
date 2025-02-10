@@ -24,7 +24,7 @@ export function PhysioFeedbackField({ form }: PhysioFeedbackFieldProps) {
         name="hasSeenPhysio"
         render={({ field }) => (
           <FormItem className="space-y-3">
-            <FormLabel>Have you seen a Physiotherapist?</FormLabel>
+            <FormLabel className="text-blue-600">Have you seen a Physiotherapist?</FormLabel>
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}
@@ -56,7 +56,7 @@ export function PhysioFeedbackField({ form }: PhysioFeedbackFieldProps) {
           name="physioFeedback"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What was their opinion/feedback?</FormLabel>
+              <FormLabel className="text-blue-600">What was their opinion/feedback?</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Share what your physiotherapist said..."

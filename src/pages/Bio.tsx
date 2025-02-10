@@ -25,7 +25,6 @@ const Bio = () => {
     mutation.mutate(values)
   }
 
-  // Set form values when data is loaded
   React.useEffect(() => {
     if (bioData) {
       form.reset({
@@ -40,13 +39,13 @@ const Bio = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Health Bio</h1>
+      <h1 className="text-2xl font-bold mb-6 text-blue-600">Health Bio</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <DiagnosisDateField form={form} />
           <SituationMobilityFields form={form} />
           <PhysioFeedbackField form={form} />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
             Save Bio
           </Button>
         </form>

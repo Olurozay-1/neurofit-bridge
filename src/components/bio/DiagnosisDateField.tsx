@@ -33,7 +33,7 @@ export function DiagnosisDateField({ form }: DiagnosisDateFieldProps) {
       name="diagnosisDate"
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel>Date of Diagnosis/Incident/Surgery</FormLabel>
+          <FormLabel className="text-blue-600">Date of Diagnosis/Incident/Surgery</FormLabel>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -49,7 +49,7 @@ export function DiagnosisDateField({ form }: DiagnosisDateFieldProps) {
                   ) : (
                     <span>Pick a date</span>
                   )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50 text-blue-600" />
                 </Button>
               </FormControl>
             </PopoverTrigger>

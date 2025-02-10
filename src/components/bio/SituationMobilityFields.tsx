@@ -23,7 +23,7 @@ export function SituationMobilityFields({ form }: SituationMobilityFieldsProps) 
         name="situation"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Explanation of the Situation</FormLabel>
+            <FormLabel className="text-blue-600">Explanation of the Situation</FormLabel>
             <FormDescription>
               Describe what happened that led you to need this app
             </FormDescription>
@@ -44,7 +44,7 @@ export function SituationMobilityFields({ form }: SituationMobilityFieldsProps) 
         name="mobilityDescription"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Mobility Level</FormLabel>
+            <FormLabel className="text-blue-600">Mobility Level</FormLabel>
             <FormDescription>
               Describe what you can and cannot do (e.g., walking unassisted, raising arms)
             </FormDescription>

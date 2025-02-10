@@ -27,7 +27,8 @@ export function useBioData() {
         throw new Error("No authenticated user found")
       }
 
-      const { error } = await supabase.from("user_bios").upsert({
+      // First save the bio data
+      const { error: saveError } = await supabase.from("user_bios").upsert({
         diagnosis_date: values.diagnosisDate.toISOString().split('T')[0],
         situation: values.situation,
         mobility_description: values.mobilityDescription,
@@ -36,7 +37,14 @@ export function useBioData() {
         user_id: userSession.session.user.id,
       })
 
-      if (error) throw error
+      if (saveError) throw saveError
+
+      // Generate and save the AI summary
+      const { error: summaryError } = await supabase.functions.invoke("generate-bio-summary", {
+        body: { bioData: values }
+      })
+
+      if (summaryError) throw summaryError
     },
     onSuccess: () => {
       toast({
