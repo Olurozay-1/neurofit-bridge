@@ -99,7 +99,7 @@ export function SignInForm({ setIsLoading, isLoading }: SignInFormProps) {
         />
         <Button 
           type="submit" 
-          className="w-full bg-[#1EAEDB] hover:bg-[#0FA0CE] text-white" 
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white" 
           disabled={isLoading}
         >
           {isLoading ? <div className="animate-spin">↻</div> : "Sign In"}
