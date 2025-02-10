@@ -109,7 +109,7 @@ export default function Programs() {
         </CardContent>
       </Card>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="border-b border-gray-200">
           <nav className="-mb-px flex space-x-8">
             <button className="border-b-2 border-blue-600 py-4 px-1 text-sm font-medium text-blue-600">
@@ -122,12 +122,9 @@ export default function Programs() {
         </div>
 
         {!hasBio ? (
-          <div className="text-center py-12">
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Complete Your Health Bio For Tailored Exercises
-            </h3>
+          <div className="text-center py-8">
             <p className="text-gray-600">
-              We'll customize exercises based on your specific needs and goals.
+              Complete your Health Bio so we can learn more about you and create tailored plans and answer questions with context.
             </p>
           </div>
         ) : (
