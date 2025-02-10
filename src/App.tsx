@@ -13,6 +13,7 @@ import Index from "./pages/Index"
 import NotFound from "./pages/NotFound"
 import Programs from "./pages/Programs"
 import Chat from "./pages/Chat"
+import Goals from "./pages/Goals"
 
 const queryClient = new QueryClient()
 
@@ -67,6 +68,16 @@ const App = () => {
                 element={
                   session ? (
                     <Chat />
+                  ) : (
+                    <Navigate to="/auth" replace />
+                  )
+                }
+              />
+              <Route
+                path="/goals"
+                element={
+                  session ? (
+                    <Goals />
                   ) : (
                     <Navigate to="/auth" replace />
                   )
