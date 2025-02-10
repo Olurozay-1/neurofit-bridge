@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Pencil } from "lucide-react"
+import ReactMarkdown from 'react-markdown'
 
 interface BioSummaryProps {
   summary: string
@@ -16,7 +17,18 @@ export function BioSummary({ summary, onEdit }: BioSummaryProps) {
           <CardTitle className="text-2xl font-bold text-white">Your Bio Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-white leading-relaxed whitespace-pre-wrap">{summary}</p>
+          <div className="text-white leading-relaxed">
+            <ReactMarkdown 
+              components={{
+                p: ({children}) => <p className="mb-4 last:mb-0">{children}</p>,
+                strong: ({children}) => <span className="font-semibold">{children}</span>,
+                ul: ({children}) => <ul className="list-disc pl-4 mb-4">{children}</ul>,
+                li: ({children}) => <li className="mb-2">{children}</li>
+              }}
+            >
+              {summary}
+            </ReactMarkdown>
+          </div>
         </CardContent>
       </Card>
       
