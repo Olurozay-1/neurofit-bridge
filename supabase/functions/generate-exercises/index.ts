@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts"
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
@@ -25,10 +24,10 @@ serve(async (req) => {
     ${bioData.hasSeenPhysio === 'yes' ? `Physiotherapist Feedback: ${bioData.physioFeedback}` : ''}
     
     Generate the following in a structured way:
-    1. A list of 3-5 body areas to focus on, starting each line with "Focus Area:"
-    2. Clear advice on exercise frequency and duration, starting with "Frequency:"
-    3. A list of 5 practical daily tips for staying active, starting each line with "Tip:"
-    4. A personalized motivational quote that references their interests from the "About Me" section, starting with "Quote:"`
+    1. A list of 3-5 body areas to focus on
+    2. Clear advice on exercise frequency and duration
+    3. A list of 5 practical daily tips for staying active
+    4. A personalized motivational quote that references their interests from the "About Me" section`
 
     // Generate recommendations using OpenAI
     const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -55,44 +54,20 @@ serve(async (req) => {
     const openAIData = await openAIResponse.json()
     const recommendationsText = openAIData.choices[0].message.content
 
-    // Parse the OpenAI response with more robust error handling
-    const focusAreas = recommendationsText
+    // Parse the OpenAI response
+    const focusAreas = recommendationsText.match(/body areas to focus on:?([\s\S]*?)(?=Clear advice on exercise|$)/i)?.[1]
       .split('\n')
-      .filter(line => line.toLowerCase().includes('focus area:'))
-      .map(area => area.replace(/^.*?focus area:\s*/i, '').trim())
+      .filter(area => area.trim())
+      .map(area => area.replace(/^[-*\d.]+\s*/, '').trim())
 
-    if (!focusAreas.length) {
-      throw new Error('Failed to generate focus areas')
-    }
+    const frequencyAdvice = recommendationsText.match(/exercise frequency and duration:?([\s\S]*?)(?=practical daily tips|$)/i)?.[1].trim()
 
-    const frequencyAdvice = recommendationsText
+    const dailyTips = recommendationsText.match(/practical daily tips:?([\s\S]*?)(?=personalized motivational quote|$)/i)?.[1]
       .split('\n')
-      .find(line => line.toLowerCase().includes('frequency:'))
-      ?.replace(/^.*?frequency:\s*/i, '')
-      ?.trim()
+      .filter(tip => tip.trim())
+      .map(tip => tip.replace(/^[-*\d.]+\s*/, '').trim())
 
-    if (!frequencyAdvice) {
-      throw new Error('Failed to generate frequency advice')
-    }
-
-    const dailyTips = recommendationsText
-      .split('\n')
-      .filter(line => line.toLowerCase().includes('tip:'))
-      .map(tip => tip.replace(/^.*?tip:\s*/i, '').trim())
-
-    if (!dailyTips.length) {
-      throw new Error('Failed to generate daily tips')
-    }
-
-    const motivationalQuote = recommendationsText
-      .split('\n')
-      .find(line => line.toLowerCase().includes('quote:'))
-      ?.replace(/^.*?quote:\s*/i, '')
-      ?.trim()
-
-    if (!motivationalQuote) {
-      throw new Error('Failed to generate motivational quote')
-    }
+    const motivationalQuote = recommendationsText.match(/motivational quote:?([\s\S]*?)$/i)?.[1].trim()
 
     // Save the recommendations to the database
     const supabaseClient = createClient(
@@ -130,7 +105,7 @@ serve(async (req) => {
 
     if (quoteError) throw quoteError
 
-    // Generate exercises
+    // Continue with exercise generation (keep existing exercise generation code)
     const exercisePrompt = `Based on the following health information, suggest 3-5 simple exercises:
     About the person: ${bioData.aboutMe}
     Situation: ${bioData.situation}
@@ -174,46 +149,24 @@ serve(async (req) => {
 
     // Parse the OpenAI response for exercises
     const exercises = exercisesText.split('\n\n').map(exerciseText => {
-      const title = exerciseText.match(/Title:\s*(.*)/)?.[1]?.trim()
-      const description = exerciseText.match(/Description:\s*(.*)/)?.[1]?.trim()
-      const instructions = exerciseText
-        .match(/Instructions:([\s\S]*?)(?=Duration:|$)/)?.[1]
-        ?.split('\n')
-        .filter(line => line.trim())
-        .map(line => line.replace(/^\d+\.\s*/, '').trim())
-      const duration = exerciseText.match(/Duration:\s*(.*)/)?.[1]?.trim()
-      const level = exerciseText.match(/Level:\s*(.*)/)?.[1]?.trim()
-      const repetitions = exerciseText.match(/Repetitions:\s*(.*)/)?.[1]?.trim()
-      const safety_notes = exerciseText.match(/Safety notes:\s*(.*)/)?.[1]?.trim()
-
-      if (!title || !description || !instructions || !duration || !level || !repetitions || !safety_notes) {
-        console.error('Invalid exercise format:', exerciseText)
-        return null
-      }
+      const title = exerciseText.match(/Title: (.*)/)?.[1]
+      const description = exerciseText.match(/Description: (.*)/)?.[1]
+      const instructions = exerciseText.match(/Instructions:([\s\S]*?)Duration:/)?.[1]?.split('\n').filter(line => line.trim() !== '').map(line => line.replace(/^\d+\.\s*/, '').trim())
+      const duration = exerciseText.match(/Duration: (.*)/)?.[1]
+      const level = exerciseText.match(/Level: (.*)/)?.[1]
+      const repetitions = exerciseText.match(/Repetitions: (.*)/)?.[1]
+      const safety_notes = exerciseText.match(/Safety notes: (.*)/)?.[1]
 
       return {
-        title,
-        description,
-        instructions,
-        duration,
-        level,
-        repetitions,
-        safety_notes,
-        exercise_type: 'physical',
+        title: title?.trim(),
+        description: description?.trim(),
+        instructions: instructions?.filter(instruction => instruction !== undefined),
+        duration: duration?.trim(),
+        level: level?.trim(),
+        repetitions: repetitions?.trim(),
+        safety_notes: safety_notes?.trim(),
       }
-    }).filter(exercise => exercise !== null)
-
-    if (!exercises.length) {
-      throw new Error('Failed to generate valid exercises')
-    }
-
-    // Delete existing exercises for this user
-    const { error: deleteExercisesError } = await supabaseClient
-      .from('exercises')
-      .delete()
-      .eq('user_id', userId)
-
-    if (deleteExercisesError) throw deleteExercisesError
+    }).filter(exercise => exercise.title)
 
     // Save the exercises to the database
     for (const exercise of exercises) {

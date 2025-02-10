@@ -1,5 +1,4 @@
 
-import * as React from "react"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
@@ -86,15 +85,6 @@ export default function Programs() {
   const hasBio = Boolean(bioData?.bio_summary)
   const hasProgram = Boolean(recommendations)
 
-  // Create a dialog ref to control the dialog programmatically
-  const dialogTriggerRef = React.useRef<HTMLButtonElement>(null)
-
-  const handleViewProgram = () => {
-    if (dialogTriggerRef.current) {
-      dialogTriggerRef.current.click()
-    }
-  }
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-8">
@@ -105,10 +95,10 @@ export default function Programs() {
         <ProgramHeader 
           hasBio={hasBio} 
           hasProgram={hasProgram}
-          onViewProgram={handleViewProgram}
+          onViewProgram={() => {}}
         />
         <DialogTrigger asChild>
-          <button ref={dialogTriggerRef} className="hidden" />
+          <span className="hidden" />
         </DialogTrigger>
         <ProgramRecommendationsDialog 
           recommendations={recommendations}
