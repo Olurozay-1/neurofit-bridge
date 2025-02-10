@@ -169,6 +169,7 @@ export type Database = {
       }
       user_bios: {
         Row: {
+          about_me: string | null
           bio_summary: string | null
           created_at: string
           diagnosis_date: string | null
@@ -181,6 +182,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          about_me?: string | null
           bio_summary?: string | null
           created_at?: string
           diagnosis_date?: string | null
@@ -193,6 +195,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          about_me?: string | null
           bio_summary?: string | null
           created_at?: string
           diagnosis_date?: string | null

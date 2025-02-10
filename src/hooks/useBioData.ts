@@ -36,6 +36,7 @@ export function useBioData() {
         mobility_description: values.mobilityDescription,
         has_seen_physio: values.hasSeenPhysio === "yes",
         physio_feedback: values.hasSeenPhysio === "yes" ? values.physioFeedback : null,
+        about_me: values.aboutMe,
         user_id: userId,
       }, {
         onConflict: 'user_id'

@@ -7,6 +7,7 @@ import { BioFormValues } from "@/types/bio"
 import { DiagnosisDateField } from "@/components/bio/DiagnosisDateField"
 import { SituationMobilityFields } from "@/components/bio/SituationMobilityFields"
 import { PhysioFeedbackField } from "@/components/bio/PhysioFeedbackField"
+import { AboutMeField } from "@/components/bio/AboutMeField"
 import { BioSummary } from "@/components/bio/BioSummary"
 import { useBioData } from "@/hooks/useBioData"
 
@@ -18,6 +19,7 @@ const Bio = () => {
       mobilityDescription: "",
       hasSeenPhysio: "no",
       physioFeedback: "",
+      aboutMe: "",
     },
   })
 
@@ -39,6 +41,7 @@ const Bio = () => {
         mobilityDescription: bioData.mobility_description || "",
         hasSeenPhysio: bioData.has_seen_physio ? "yes" : "no",
         physioFeedback: bioData.physio_feedback || "",
+        aboutMe: bioData.about_me || "",
       })
       // If we have bio data and a summary, show the summary view
       if (bioData.bio_summary) {
@@ -64,6 +67,7 @@ const Bio = () => {
           <DiagnosisDateField form={form} />
           <SituationMobilityFields form={form} />
           <PhysioFeedbackField form={form} />
+          <AboutMeField form={form} />
           <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
             Save Bio
           </Button>

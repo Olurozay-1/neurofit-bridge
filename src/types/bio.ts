@@ -5,4 +5,5 @@ export interface BioFormValues {
   mobilityDescription: string
   hasSeenPhysio: "yes" | "no"
   physioFeedback?: string
+  aboutMe: string
 }
