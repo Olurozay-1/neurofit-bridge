@@ -1,9 +1,6 @@
 
-import { useState } from "react"
-import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -14,22 +11,10 @@ import {
 import { CreateProgramForm } from "@/components/programs/CreateProgramForm"
 
 export default function Programs() {
-  const [search, setSearch] = useState("")
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-8">
         <h1 className="text-3xl font-bold text-blue-600">My Programs</h1>
-        <div className="relative w-72">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search exercises..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
-        </div>
       </div>
 
       <Card className="bg-blue-600 text-white mb-8">

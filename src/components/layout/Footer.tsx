@@ -12,7 +12,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="fixed bottom-16 left-0 right-0 md:bottom-0 bg-background border-t z-40">
+    <footer className="mt-auto bg-background border-t z-40">
       <div className="container flex h-14 items-center justify-end">
         <Button 
           variant="ghost" 
