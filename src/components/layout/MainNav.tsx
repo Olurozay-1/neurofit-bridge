@@ -41,8 +41,8 @@ export function MainNav() {
             className={cn(
               "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
               location.pathname === item.href
-                ? "bg-accent text-accent-foreground"
-                : "hover:bg-accent hover:text-accent-foreground"
+                ? "text-blue-600"
+                : "text-gray-500 hover:text-blue-600"
             )}
           >
             <item.icon className="mr-2 h-4 w-4" />
@@ -61,8 +61,8 @@ export function MainNav() {
               className={cn(
                 "flex flex-col items-center justify-center flex-1 py-2 text-xs",
                 location.pathname === item.href
-                  ? "text-primary"
-                  : "text-muted-foreground"
+                  ? "text-blue-600"
+                  : "text-gray-500 hover:text-blue-600"
               )}
             >
               <item.icon className="h-5 w-5 mb-1" />
