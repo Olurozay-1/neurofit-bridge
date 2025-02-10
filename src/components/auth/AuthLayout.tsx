@@ -17,6 +17,9 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           <h1 className="text-2xl font-bold text-[#1EAEDB]">
             NeuroPT
           </h1>
+          <p className="text-black text-sm italic">
+            "Small efforts, repeated, become breakthroughs."
+          </p>
         </div>
         {children}
       </div>
