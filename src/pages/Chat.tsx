@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useToast } from "@/components/ui/use-toast"
-import { MessageSquare, Loader2 } from "lucide-react"
+import { MessageSquare, Loader2, Upload, Mic, Send } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 
 interface Message {
@@ -54,14 +54,14 @@ export default function Chat() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="flex flex-col h-[calc(100vh-12rem)] bg-background border rounded-lg">
-        <div className="flex items-center gap-2 px-4 py-2 border-b">
+    <div className="container mx-auto px-4 py-8 max-w-3xl">
+      <div className="flex flex-col h-[calc(100vh-12rem)] bg-background rounded-xl border shadow-sm">
+        <div className="flex items-center gap-2 px-6 py-4 border-b">
           <MessageSquare className="h-5 w-5 text-blue-600" />
           <h1 className="text-lg font-semibold">Chat with NeuroPT</h1>
         </div>
 
-        <ScrollArea className="flex-1 p-4">
+        <ScrollArea className="flex-1 px-6 py-4">
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div
@@ -71,10 +71,10 @@ export default function Chat() {
                 }`}
               >
                 <div
-                  className={`max-w-[80%] px-4 py-2 rounded-lg ${
+                  className={`max-w-[85%] px-4 py-3 rounded-2xl whitespace-pre-wrap ${
                     message.role === "user"
                       ? "bg-blue-600 text-white"
-                      : "bg-muted"
+                      : "bg-gray-100 dark:bg-gray-800"
                   }`}
                 >
                   {message.content}
@@ -84,23 +84,35 @@ export default function Chat() {
           </div>
         </ScrollArea>
 
-        <form onSubmit={handleSubmit} className="p-4 border-t">
+        <div className="p-4 border-t space-y-4">
           <div className="flex gap-2">
+            <Button variant="outline" className="flex-1 bg-green-500 hover:bg-green-600 text-white">
+              <Upload className="h-4 w-4 mr-2" />
+              Upload Exercise Video
+            </Button>
+            <Button variant="outline" className="flex-1 bg-purple-500 hover:bg-purple-600 text-white">
+              <Mic className="h-4 w-4 mr-2" />
+              Record Voice Message
+            </Button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex gap-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
+              className="flex-1"
               disabled={isLoading}
             />
             <Button type="submit" disabled={isLoading || !input.trim()}>
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                "Send"
+                <Send className="h-4 w-4" />
               )}
             </Button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   )
