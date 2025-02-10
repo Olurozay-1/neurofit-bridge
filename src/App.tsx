@@ -9,7 +9,6 @@ import { supabase } from "./integrations/supabase/client"
 import { Header } from "./components/layout/Header"
 import { Footer } from "./components/layout/Footer"
 import Auth from "./pages/Auth"
-import Index from "./pages/Index"
 import NotFound from "./pages/NotFound"
 import Programs from "./pages/Programs"
 import Chat from "./pages/Chat"
@@ -47,7 +46,7 @@ const App = () => {
                 path="/"
                 element={
                   session ? (
-                    <Index />
+                    <Navigate to="/programs" replace />
                   ) : (
                     <Navigate to="/auth" replace />
                   )
@@ -89,7 +88,7 @@ const App = () => {
                   !session ? (
                     <Auth />
                   ) : (
-                    <Navigate to="/" replace />
+                    <Navigate to="/programs" replace />
                   )
                 }
               />
@@ -104,3 +103,4 @@ const App = () => {
 }
 
 export default App
+

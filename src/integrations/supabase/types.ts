@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          awarded_at: string
+          description: string | null
+          goal_id: string | null
+          id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          description?: string | null
+          goal_id?: string | null
+          id?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string
+          description?: string | null
+          goal_id?: string | null
+          id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievements_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       daily_quotes: {
         Row: {
           created_at: string
@@ -29,6 +64,45 @@ export type Database = {
           date?: string
           id?: string
           quote?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      goals: {
+        Row: {
+          created_at: string
+          current_count: number
+          description: string | null
+          id: string
+          last_tracked_at: string | null
+          streak_count: number
+          target_count: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_count?: number
+          description?: string | null
+          id?: string
+          last_tracked_at?: string | null
+          streak_count?: number
+          target_count?: number
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_count?: number
+          description?: string | null
+          id?: string
+          last_tracked_at?: string | null
+          streak_count?: number
+          target_count?: number
+          title?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
