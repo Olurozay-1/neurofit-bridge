@@ -1,57 +1,76 @@
 
 import * as React from "react"
-import { Link } from "react-router-dom"
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+import { Link, useLocation } from "react-router-dom"
 import { Brain, Target, FileText, MessageSquare } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function MainNav() {
+  const location = useLocation()
+  
   const menuItems = [
     {
-      title: "My Programs",
+      title: "Programs",
       href: "/programs",
       icon: Brain,
-      description: "View and manage your exercise programs",
     },
     {
-      title: "NeuroPT",
+      title: "Chat",
       href: "/chat",
       icon: MessageSquare,
-      description: "Chat with our AI assistant",
     },
     {
-      title: "My Goals",
+      title: "Goals",
       href: "/goals",
       icon: Target,
-      description: "Track your progress and goals",
     },
     {
-      title: "Documents",
+      title: "Docs",
       href: "/documents",
       icon: FileText,
-      description: "Access your documents and reports",
     },
   ]
 
   return (
-    <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList>
+    <>
+      {/* Desktop Navigation */}
+      <nav className="hidden md:flex items-center space-x-4">
         {menuItems.map((item) => (
-          <NavigationMenuItem key={item.title}>
-            <Link to={item.href}>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <item.icon className="mr-2 h-4 w-4" />
-                <span>{item.title}</span>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
+          <Link
+            key={item.title}
+            to={item.href}
+            className={cn(
+              "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
+              location.pathname === item.href
+                ? "bg-accent text-accent-foreground"
+                : "hover:bg-accent hover:text-accent-foreground"
+            )}
+          >
+            <item.icon className="mr-2 h-4 w-4" />
+            {item.title}
+          </Link>
         ))}
-      </NavigationMenuList>
-    </NavigationMenu>
+      </nav>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t z-50">
+        <div className="flex justify-around items-center h-16">
+          {menuItems.map((item) => (
+            <Link
+              key={item.title}
+              to={item.href}
+              className={cn(
+                "flex flex-col items-center justify-center flex-1 py-2 text-xs",
+                location.pathname === item.href
+                  ? "text-primary"
+                  : "text-muted-foreground"
+              )}
+            >
+              <item.icon className="h-5 w-5 mb-1" />
+              {item.title}
+            </Link>
+          ))}
+        </div>
+      </nav>
+    </>
   )
 }

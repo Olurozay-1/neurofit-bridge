@@ -38,7 +38,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="relative flex min-h-screen flex-col">
+          <div className="relative flex min-h-screen flex-col pb-16 md:pb-0">
             {session && <Header />}
             <Routes>
               <Route
