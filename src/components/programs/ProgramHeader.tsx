@@ -17,16 +17,14 @@ export function ProgramHeader({ hasBio, hasProgram, onViewProgram }: ProgramHead
       <CardContent className="p-8">
         <div className="space-y-4">
           <span className="text-sm font-medium uppercase tracking-wider opacity-80">
-            {hasBio ? "Your Program" : "Get Started"}
+            {hasBio ? "Recommended" : "Get Started"}
           </span>
           <h2 className="text-2xl font-semibold">
-            {hasBio 
-              ? "View your tailored program created by your AI Neuro PT" 
-              : "Complete Your Health Bio"}
+            {hasBio ? "Daily Mobility Program" : "Complete Your Health Bio"}
           </h2>
           <p className="text-blue-100">
             {hasBio 
-              ? "Personalized exercises and recommendations based on your profile"
+              ? "Customized for your recovery goals"
               : "Complete your Health Bio so we can learn more about you and create tailored plans and answer questions with context."}
           </p>
           {hasBio ? (
@@ -35,7 +33,7 @@ export function ProgramHeader({ hasBio, hasProgram, onViewProgram }: ProgramHead
               className="bg-white text-blue-600 hover:bg-blue-50"
               onClick={onViewProgram}
             >
-              View Program
+              {hasProgram ? "View Program" : "Create Program"}
             </Button>
           ) : (
             <Button 

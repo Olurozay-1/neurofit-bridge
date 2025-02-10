@@ -1,11 +1,10 @@
 
-import { Dialog } from "@/components/ui/dialog"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { ProgramHeader } from "@/components/programs/ProgramHeader"
 import { ProgramRecommendationsDialog } from "@/components/programs/ProgramRecommendations"
 import { ExerciseList } from "@/components/programs/ExerciseList"
-import { useState } from "react"
 
 interface Exercise {
   id: string
@@ -26,8 +25,6 @@ interface ProgramRecommendations {
 }
 
 export default function Programs() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-
   const { data: bioData, isLoading: isBioLoading } = useQuery({
     queryKey: ["bio"],
     queryFn: async () => {
@@ -94,12 +91,15 @@ export default function Programs() {
         <h1 className="text-3xl font-bold text-blue-600">My Programs</h1>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog>
         <ProgramHeader 
           hasBio={hasBio} 
           hasProgram={hasProgram}
-          onViewProgram={() => setIsDialogOpen(true)}
+          onViewProgram={() => {}}
         />
+        <DialogTrigger asChild>
+          <span className="hidden" />
+        </DialogTrigger>
         <ProgramRecommendationsDialog 
           recommendations={recommendations}
           quote={quote}
