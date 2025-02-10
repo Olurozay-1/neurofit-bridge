@@ -8,16 +8,16 @@ import { Brain, Target, FileText, MessageSquare } from "lucide-react"
 export function MobileNav() {
   const menuItems = [
     {
-      title: "NeuroPT",
-      href: "/chat",
-      icon: MessageSquare,
-      description: "Chat with our AI assistant",
-    },
-    {
       title: "My Programs",
       href: "/programs",
       icon: Brain,
       description: "View and manage your exercise programs",
+    },
+    {
+      title: "NeuroPT",
+      href: "/chat",
+      icon: MessageSquare,
+      description: "Chat with our AI assistant",
     },
     {
       title: "My Goals",
