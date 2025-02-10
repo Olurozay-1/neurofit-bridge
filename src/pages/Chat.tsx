@@ -73,19 +73,19 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-white">
-      <div className="container mx-auto px-4 py-8 max-w-3xl flex-1 flex flex-col">
-        <div className="mb-8">
-          <h1 className="text-[32px] font-medium text-[#1A56DB] mb-2">
+    <div className="flex flex-col min-h-screen bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl flex-1 flex flex-col py-8">
+        <div className="text-center mb-12">
+          <h1 className="text-[32px] font-medium text-[#1A56DB] mb-4">
             Hi, how can I help you today?
           </h1>
-          <p className="text-gray-600 text-base">
+          <p className="text-gray-600 text-lg max-w-xl mx-auto px-4">
             I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
           </p>
         </div>
 
-        <ScrollArea className="flex-1">
-          <div className="space-y-4">
+        <ScrollArea className="flex-1 px-2">
+          <div className="space-y-4 mb-4">
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -94,7 +94,7 @@ export default function Chat() {
                 }`}
               >
                 <div
-                  className={`max-w-[85%] px-4 py-3 rounded-lg ${
+                  className={`max-w-[85%] px-5 py-3.5 rounded-2xl ${
                     message.role === "user"
                       ? "bg-blue-600 text-white"
                       : "bg-gray-100 text-gray-900"
@@ -112,7 +112,7 @@ export default function Chat() {
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 px-4 py-3 rounded-lg flex items-center gap-2 text-gray-900">
+                <div className="bg-gray-100 px-4 py-3 rounded-2xl flex items-center gap-2 text-gray-900">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="text-sm">NeuroPT is thinking...</span>
                 </div>
@@ -122,19 +122,19 @@ export default function Chat() {
         </ScrollArea>
 
         <div className="mt-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <Button 
               variant="outline" 
-              className="bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white p-6 h-auto flex items-center justify-center gap-2 rounded-lg"
+              className="h-11 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
             >
-              <Upload className="h-5 w-5" />
+              <Upload className="h-4 w-4 mr-2" />
               Upload Video
             </Button>
             <Button 
               variant="outline" 
-              className="bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white p-6 h-auto flex items-center justify-center gap-2 rounded-lg"
+              className="h-11 text-sm font-medium bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm rounded-xl"
             >
-              <Mic className="h-5 w-5" />
+              <Mic className="h-4 w-4 mr-2" />
               Record Voice
             </Button>
           </div>
@@ -144,12 +144,12 @@ export default function Chat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask anything..."
-              className="flex-1 border border-gray-200 rounded-full placeholder:text-gray-400"
+              className="flex-1 h-11 border border-gray-200 rounded-xl shadow-sm placeholder:text-gray-400"
             />
             <Button 
               type="submit" 
               size="icon"
-              className="rounded-full bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white"
+              className="h-11 w-11 rounded-xl bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white shadow-sm"
               disabled={isLoading}
             >
               {isLoading ? (
