@@ -74,54 +74,56 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl flex-1 flex flex-col py-6">
-        <div className="text-center mb-8">
-          <h1 className="text-[32px] font-bold text-[#1A56DB] mb-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl flex-1 flex flex-col">
+        <div className="text-center mb-4">
+          <h1 className="text-[32px] font-bold text-[#1A56DB] mb-2">
             How can I help you today?
           </h1>
-          <p className="text-gray-600 text-lg max-w-xl mx-auto px-4">
+          <p className="text-gray-600 text-lg max-w-xl mx-auto">
             I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
           </p>
         </div>
 
-        <ScrollArea className="flex-1 px-2">
-          <div className="space-y-4 mb-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
+        <div className="flex-1 flex flex-col min-h-0">
+          <ScrollArea className="flex-1 px-2">
+            <div className="space-y-4 mb-4">
+              {messages.map((message, index) => (
                 <div
-                  className={`max-w-[85%] px-5 py-3.5 rounded-2xl ${
-                    message.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-900"
+                  key={index}
+                  className={`flex ${
+                    message.role === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  {message.role === "user" ? (
-                    message.content
-                  ) : (
-                    <ReactMarkdown className="prose dark:prose-invert max-w-none prose-sm">
-                      {message.content}
-                    </ReactMarkdown>
-                  )}
+                  <div
+                    className={`max-w-[85%] px-5 py-3.5 rounded-2xl ${
+                      message.role === "user"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-100 text-gray-900"
+                    }`}
+                  >
+                    {message.role === "user" ? (
+                      message.content
+                    ) : (
+                      <ReactMarkdown className="prose dark:prose-invert max-w-none prose-sm">
+                        {message.content}
+                      </ReactMarkdown>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-gray-100 px-4 py-3 rounded-2xl flex items-center gap-2 text-gray-900">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span className="text-sm">NeuroPT is thinking...</span>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-gray-100 px-4 py-3 rounded-2xl flex items-center gap-2 text-gray-900">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-sm">NeuroPT is thinking...</span>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </ScrollArea>
+              )}
+            </div>
+          </ScrollArea>
+        </div>
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-4 py-4 bg-white">
           <div className="grid grid-cols-2 gap-3">
             <Button 
               variant="outline" 
@@ -162,5 +164,5 @@ export default function Chat() {
         </div>
       </div>
     </div>
-  )
+  );
 }
