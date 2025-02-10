@@ -76,10 +76,10 @@ export default function Chat() {
     <div className="flex flex-col min-h-screen bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl flex-1 flex flex-col py-8">
         <div className="text-center mb-12">
-          <h1 className="text-[32px] font-medium text-[#1A56DB] mb-4">
-            Hi, how can I help you today?
+          <h1 className="text-[32px] font-bold text-[#1A56DB] mb-4">
+            How can I help you today?
           </h1>
-          <p className="text-gray-600 text-lg max-w-xl mx-auto px-4">
+          <p className="text-gray-600 text-lg max-w-xl mx-auto px-4 font-medium">
             I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
           </p>
         </div>
