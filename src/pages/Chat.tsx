@@ -31,8 +31,15 @@ export default function Chat() {
     setMessages((prev) => [...prev, { role: "user", content: userMessage }])
 
     try {
+      // Get current user's ID
+      const { data: sessionData } = await supabase.auth.getSession()
+      const userId = sessionData.session?.user?.id
+
       const { data, error } = await supabase.functions.invoke('chat', {
-        body: { prompt: userMessage }
+        body: { 
+          prompt: userMessage,
+          userId: userId // Pass the user ID to provide context
+        }
       })
 
       if (error) throw error
