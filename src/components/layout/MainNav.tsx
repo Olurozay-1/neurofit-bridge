@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { Link, useLocation } from "react-router-dom"
-import { Brain, Target, FileText, MessageSquare } from "lucide-react"
+import { Brain, Target, UserRound, MessageSquare } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function MainNav() {
@@ -24,9 +24,9 @@ export function MainNav() {
       icon: Target,
     },
     {
-      title: "Docs",
-      href: "/documents",
-      icon: FileText,
+      title: "Bio",
+      href: "/bio",
+      icon: UserRound,
     },
   ]
 

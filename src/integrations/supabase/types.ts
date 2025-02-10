@@ -128,6 +128,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_bios: {
+        Row: {
+          created_at: string
+          diagnosis_date: string | null
+          has_seen_physio: boolean | null
+          id: string
+          mobility_description: string | null
+          physio_feedback: string | null
+          situation: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          diagnosis_date?: string | null
+          has_seen_physio?: boolean | null
+          id?: string
+          mobility_description?: string | null
+          physio_feedback?: string | null
+          situation?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          diagnosis_date?: string | null
+          has_seen_physio?: boolean | null
+          id?: string
+          mobility_description?: string | null
+          physio_feedback?: string | null
+          situation?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

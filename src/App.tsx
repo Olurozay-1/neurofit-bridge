@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound"
 import Programs from "./pages/Programs"
 import Chat from "./pages/Chat"
 import Goals from "./pages/Goals"
+import Bio from "./pages/Bio"
 
 const queryClient = new QueryClient()
 
@@ -83,6 +84,16 @@ const App = () => {
                 }
               />
               <Route
+                path="/bio"
+                element={
+                  session ? (
+                    <Bio />
+                  ) : (
+                    <Navigate to="/auth" replace />
+                  )
+                }
+              />
+              <Route
                 path="/auth"
                 element={
                   !session ? (
@@ -103,4 +114,3 @@ const App = () => {
 }
 
 export default App
-
