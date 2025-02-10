@@ -75,14 +75,16 @@ export default function Chat() {
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl h-full flex flex-col">
-        <div className="text-center pt-4 mb-1">
-          <h1 className="text-[28px] font-bold text-[#1A56DB] mb-0.5">
-            How can I help you today?
-          </h1>
-          <p className="text-gray-600 text-base max-w-xl mx-auto">
-            I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
-          </p>
-        </div>
+        {messages.length === 0 && (
+          <div className="text-center pt-4 mb-1">
+            <h1 className="text-[28px] font-bold text-[#1A56DB] mb-0.5">
+              How can I help you today?
+            </h1>
+            <p className="text-gray-600 text-base max-w-xl mx-auto">
+              I'm your AI physiotherapy assistant. You can ask me questions, upload exercise videos, or record voice messages.
+            </p>
+          </div>
+        )}
 
         <div className="flex-1 min-h-0 mb-1">
           <ScrollArea className="h-full px-2">
@@ -164,5 +166,5 @@ export default function Chat() {
         </div>
       </div>
     </div>
-  );
+  )
 }
