@@ -76,7 +76,7 @@ export type Database = {
           id: string
           last_tracked_at: string | null
           streak_count: number
-          target_count: number
+          target_date: string
           title: string
           updated_at: string
           user_id: string
@@ -88,7 +88,7 @@ export type Database = {
           id?: string
           last_tracked_at?: string | null
           streak_count?: number
-          target_count?: number
+          target_date: string
           title: string
           updated_at?: string
           user_id: string
@@ -100,7 +100,7 @@ export type Database = {
           id?: string
           last_tracked_at?: string | null
           streak_count?: number
-          target_count?: number
+          target_date?: string
           title?: string
           updated_at?: string
           user_id?: string
