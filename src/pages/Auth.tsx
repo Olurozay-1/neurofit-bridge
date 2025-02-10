@@ -12,7 +12,7 @@ export default function Auth() {
   return (
     <AuthLayout>
       <div className="flex flex-col space-y-2 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="text-2xl font-semibold tracking-tight text-[#1EAEDB]">
           {isSignUp ? "Create an account" : "Welcome back"}
         </h1>
         <p className="text-sm text-muted-foreground">
@@ -32,7 +32,7 @@ export default function Auth() {
         {isSignUp ? "Already have an account? " : "Don't have an account? "}
         <Button
           variant="link"
-          className="underline"
+          className="text-[#1EAEDB] hover:text-[#0FA0CE]"
           onClick={() => setIsSignUp(!isSignUp)}
         >
           {isSignUp ? "Sign In" : "Sign Up"}

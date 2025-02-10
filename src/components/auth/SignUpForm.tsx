@@ -179,7 +179,11 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          className="w-full bg-[#1EAEDB] hover:bg-[#0FA0CE] text-white" 
+          disabled={isLoading}
+        >
           {isLoading ? <div className="animate-spin">↻</div> : "Sign Up"}
         </Button>
       </form>
