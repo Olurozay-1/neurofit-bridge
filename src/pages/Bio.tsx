@@ -1,5 +1,6 @@
 
 import { useState } from "react"
+import * as React from "react"
 import { useForm } from "react-hook-form"
 import { format } from "date-fns"
 import { useQuery, useMutation } from "@tanstack/react-query"
@@ -63,7 +64,7 @@ const Bio = () => {
   const mutation = useMutation({
     mutationFn: async (values: BioFormValues) => {
       const { error } = await supabase.from("user_bios").upsert({
-        diagnosis_date: values.diagnosisDate,
+        diagnosis_date: values.diagnosisDate.toISOString().split('T')[0], // Convert Date to YYYY-MM-DD
         situation: values.situation,
         mobility_description: values.mobilityDescription,
         has_seen_physio: values.hasSeenPhysio === "yes",
