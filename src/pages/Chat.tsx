@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useToast } from "@/components/ui/use-toast"
 import { MessageSquare, Loader2, Upload, Mic, Send } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
+import ReactMarkdown from 'react-markdown'
 
 interface Message {
   role: "user" | "assistant"
@@ -71,16 +72,30 @@ export default function Chat() {
                 }`}
               >
                 <div
-                  className={`max-w-[85%] px-4 py-3 rounded-2xl whitespace-pre-wrap ${
+                  className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                     message.role === "user"
                       ? "bg-blue-600 text-white"
                       : "bg-gray-100 dark:bg-gray-800"
                   }`}
                 >
-                  {message.content}
+                  {message.role === "user" ? (
+                    message.content
+                  ) : (
+                    <ReactMarkdown className="prose dark:prose-invert max-w-none prose-sm">
+                      {message.content}
+                    </ReactMarkdown>
+                  )}
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 dark:bg-gray-800 px-4 py-3 rounded-2xl flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="text-sm">NeuroPT is thinking...</span>
+                </div>
+              </div>
+            )}
           </div>
         </ScrollArea>
 
