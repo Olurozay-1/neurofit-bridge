@@ -20,7 +20,7 @@ const Goals = () => {
         .select('quote')
         .eq('user_id', session.user.id)
         .eq('date', today)
-        .single()
+        .maybeSingle()
 
       if (existingQuote) {
         return existingQuote.quote
@@ -34,6 +34,20 @@ const Goals = () => {
       })
       
       const { quote: newQuote } = await response.json()
+      
+      // Store the new quote in the database
+      const { error: insertError } = await supabase
+        .from('daily_quotes')
+        .insert({
+          quote: newQuote,
+          user_id: session.user.id,
+          date: today
+        })
+
+      if (insertError) {
+        console.error('Error storing quote:', insertError)
+      }
+
       return newQuote
     }
   })
