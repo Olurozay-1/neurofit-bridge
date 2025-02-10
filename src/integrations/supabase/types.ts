@@ -80,6 +80,7 @@ export type Database = {
           repetitions: string
           safety_notes: string
           title: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -92,6 +93,7 @@ export type Database = {
           repetitions: string
           safety_notes: string
           title: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -104,6 +106,7 @@ export type Database = {
           repetitions?: string
           safety_notes?: string
           title?: string
+          user_id?: string | null
         }
         Relationships: []
       }
