@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
@@ -21,8 +20,7 @@ import { useToast } from "@/components/ui/use-toast"
 interface Goal {
   id: string
   title: string
-  description: string
-  target_count: number
+  target_date: string
   current_count: number
   streak_count: number
 }
@@ -39,8 +37,7 @@ const Goals = () => {
   const [newGoalOpen, setNewGoalOpen] = useState(false)
   const [newGoal, setNewGoal] = useState({
     title: "",
-    description: "",
-    target_count: 1,
+    target_date: "",
   })
   const { toast } = useToast()
 
@@ -115,10 +112,20 @@ const Goals = () => {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
 
+    if (!newGoal.title || !newGoal.target_date) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill in all required fields.",
+      })
+      return
+    }
+
     const { error } = await supabase
       .from('goals')
       .insert({
-        ...newGoal,
+        title: newGoal.title,
+        target_date: newGoal.target_date,
         user_id: session.user.id
       })
 
@@ -134,12 +141,12 @@ const Goals = () => {
         description: "Goal created successfully!",
       })
       setNewGoalOpen(false)
-      setNewGoal({ title: "", description: "", target_count: 1 })
+      setNewGoal({ title: "", target_date: "" })
       refetchGoals()
     }
   }
 
-  const handleProgress = async (goalId: string, currentCount: number, targetCount: number) => {
+  const handleProgress = async (goalId: string, currentCount: number) => {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
 
@@ -149,21 +156,15 @@ const Goals = () => {
       .eq('id', goalId)
 
     if (!error) {
-      if (currentCount + 1 === targetCount) {
-        await supabase
-          .from('achievements')
-          .insert({
-            goal_id: goalId,
-            user_id: session.user.id,
-            title: "Goal Achieved!",
-            description: "Congratulations on reaching your goal!",
-          })
-        
-        toast({
-          title: "Achievement Unlocked! 🎉",
-          description: "Congratulations on reaching your goal!",
+      await supabase
+        .from('achievements')
+        .insert({
+          goal_id: goalId,
+          user_id: session.user.id,
+          title: "Goal Progress!",
+          description: "You're making progress towards your goal!",
         })
-      }
+      
       refetchGoals()
     }
   }
@@ -214,24 +215,14 @@ const Goals = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="description" className="text-base font-medium">Description (Optional)</Label>
+                    <Label htmlFor="target_date" className="text-base font-medium">Target Date</Label>
                     <Input
-                      id="description"
-                      value={newGoal.description}
-                      onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
+                      id="target_date"
+                      type="date"
+                      value={newGoal.target_date}
+                      onChange={(e) => setNewGoal({ ...newGoal, target_date: e.target.value })}
                       className="mt-2"
-                      placeholder="Add some details about your goal"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="target" className="text-base font-medium">Target Count</Label>
-                    <Input
-                      id="target"
-                      type="number"
-                      min="1"
-                      value={newGoal.target_count}
-                      onChange={(e) => setNewGoal({ ...newGoal, target_count: parseInt(e.target.value) })}
-                      className="mt-2"
+                      min={new Date().toISOString().split('T')[0]}
                     />
                   </div>
                 </div>
@@ -258,20 +249,20 @@ const Goals = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="font-semibold text-lg">{goal.title}</h3>
-                      <p className="text-gray-600 text-sm">{goal.description}</p>
+                      <p className="text-gray-600 text-sm">{goal.target_date}</p>
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleProgress(goal.id, goal.current_count, goal.target_count)}
-                      disabled={goal.current_count >= goal.target_count}
+                      onClick={() => handleProgress(goal.id, goal.current_count)}
+                      
                     >
                       <Target className="h-5 w-5 text-blue-600" />
                     </Button>
                   </div>
-                  <Progress value={(goal.current_count / goal.target_count) * 100} className="h-2" />
+                  <Progress value={goal.current_count} className="h-2" />
                   <div className="flex justify-between text-sm text-gray-600">
-                    <span>{Math.round((goal.current_count / goal.target_count) * 100)}% Complete</span>
+                    <span>{goal.current_count}% Complete</span>
                     {goal.streak_count > 0 && (
                       <span>{goal.streak_count} days streak</span>
                     )}
