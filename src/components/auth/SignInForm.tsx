@@ -41,6 +41,10 @@ export function SignInForm({ setIsLoading, isLoading }: SignInFormProps) {
   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
     setIsLoading(true)
     try {
+      // First clear any existing session
+      await supabase.auth.signOut()
+      
+      // Then attempt to sign in
       const { error: signInError, data } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,
@@ -49,6 +53,8 @@ export function SignInForm({ setIsLoading, isLoading }: SignInFormProps) {
       if (signInError) throw signInError
 
       if (data.session) {
+        // Immediately store the session
+        await supabase.auth.setSession(data.session)
         navigate("/programs")
       }
     } catch (error) {
