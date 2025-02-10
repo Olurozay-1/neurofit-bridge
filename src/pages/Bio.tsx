@@ -7,9 +7,11 @@ import { BioFormValues } from "@/types/bio"
 import { DiagnosisDateField } from "@/components/bio/DiagnosisDateField"
 import { SituationMobilityFields } from "@/components/bio/SituationMobilityFields"
 import { PhysioFeedbackField } from "@/components/bio/PhysioFeedbackField"
+import { BioSummary } from "@/components/bio/BioSummary"
 import { useBioData } from "@/hooks/useBioData"
 
 const Bio = () => {
+  const [showForm, setShowForm] = React.useState(true)
   const form = useForm<BioFormValues>({
     defaultValues: {
       situation: "",
@@ -22,7 +24,11 @@ const Bio = () => {
   const { bioData, mutation } = useBioData()
 
   const onSubmit = (values: BioFormValues) => {
-    mutation.mutate(values)
+    mutation.mutate(values, {
+      onSuccess: () => {
+        setShowForm(false)
+      }
+    })
   }
 
   React.useEffect(() => {
@@ -34,8 +40,21 @@ const Bio = () => {
         hasSeenPhysio: bioData.has_seen_physio ? "yes" : "no",
         physioFeedback: bioData.physio_feedback || "",
       })
+      // If we have bio data and a summary, show the summary view
+      if (bioData.bio_summary) {
+        setShowForm(false)
+      }
     }
   }, [bioData, form])
+
+  if (!showForm && bioData?.bio_summary) {
+    return (
+      <BioSummary 
+        summary={bioData.bio_summary}
+        onEdit={() => setShowForm(true)}
+      />
+    )
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-6">
