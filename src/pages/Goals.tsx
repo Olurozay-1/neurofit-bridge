@@ -3,9 +3,9 @@ import { useEffect, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Trophy, Target, Plus } from "lucide-react"
+import { Target, Plus, CircleDot } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -150,7 +150,6 @@ const Goals = () => {
 
     if (!error) {
       if (currentCount + 1 === targetCount) {
-        // Create achievement with user_id
         await supabase
           .from('achievements')
           .insert({
@@ -170,22 +169,31 @@ const Goals = () => {
   }
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="max-w-4xl mx-auto px-4 py-8">
       {quote && (
-        <div className="mb-8 p-6 bg-blue-50 rounded-lg shadow-sm">
-          <p className="text-lg text-blue-800 font-medium italic text-center">
-            "{quote}"
-          </p>
-        </div>
+        <Card className="mb-8 bg-gray-50">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-4">
+              <CircleDot className="h-10 w-10 text-gray-400" />
+              <div>
+                <h2 className="text-lg font-semibold mb-1">Today's Motivation</h2>
+                <p className="text-gray-600 italic">"{quote}"</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">My Goals</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-[#0EA5E9] mb-2">My Goals</h1>
+            <p className="text-gray-600">Track your progress and celebrate achievements</p>
+          </div>
           <Dialog open={newGoalOpen} onOpenChange={setNewGoalOpen}>
             <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" /> Add Goal
+              <Button className="bg-[#0EA5E9] hover:bg-[#0EA5E9]/90">
+                <Plus className="mr-2 h-4 w-4" /> Add New Goal
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -219,67 +227,63 @@ const Goals = () => {
                     onChange={(e) => setNewGoal({ ...newGoal, target_count: parseInt(e.target.value) })}
                   />
                 </div>
-                <Button onClick={handleNewGoal}>Create Goal</Button>
+                <Button onClick={handleNewGoal} className="w-full bg-[#0EA5E9] hover:bg-[#0EA5E9]/90">Create Goal</Button>
               </div>
             </DialogContent>
           </Dialog>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {goals?.map((goal: Goal) => (
-            <Card key={goal.id}>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span>{goal.title}</span>
-                  {goal.streak_count > 0 && (
-                    <span className="text-sm text-orange-500">
-                      🔥 {goal.streak_count} day streak
-                    </span>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">{goal.description}</p>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Progress</span>
-                    <span>{goal.current_count} / {goal.target_count}</span>
+        <Card>
+          <CardContent className="pt-6">
+            <h2 className="text-xl font-semibold mb-2">Active Goals</h2>
+            <p className="text-gray-600 mb-6">Your current focus areas</p>
+            <div className="space-y-8">
+              {goals?.map((goal: Goal) => (
+                <div key={goal.id} className="space-y-2">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-lg">{goal.title}</h3>
+                      <p className="text-gray-600 text-sm">{goal.description}</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleProgress(goal.id, goal.current_count, goal.target_count)}
+                      disabled={goal.current_count >= goal.target_count}
+                    >
+                      <Target className="h-5 w-5 text-[#0EA5E9]" />
+                    </Button>
                   </div>
-                  <Progress value={(goal.current_count / goal.target_count) * 100} />
-                  <Button 
-                    className="w-full mt-4"
-                    onClick={() => handleProgress(goal.id, goal.current_count, goal.target_count)}
-                    disabled={goal.current_count >= goal.target_count}
-                  >
-                    <Target className="mr-2 h-4 w-4" />
-                    Track Progress
-                  </Button>
+                  <Progress value={(goal.current_count / goal.target_count) * 100} className="h-2" />
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>{Math.round((goal.current_count / goal.target_count) * 100)}% Complete</span>
+                    {goal.streak_count > 0 && (
+                      <span>{goal.streak_count} days streak</span>
+                    )}
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {achievements && achievements.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <Trophy className="mr-2 h-6 w-6 text-yellow-500" />
-              Achievements
-            </h2>
-            <div className="grid gap-4 md:grid-cols-3">
-              {achievements.map((achievement: Achievement) => (
-                <Card key={achievement.id}>
-                  <CardContent className="pt-6">
-                    <h3 className="font-semibold text-lg mb-2">{achievement.title}</h3>
-                    <p className="text-gray-600 text-sm">{achievement.description}</p>
-                    <p className="text-gray-400 text-xs mt-2">
-                      {new Date(achievement.awarded_at).toLocaleDateString()}
-                    </p>
-                  </CardContent>
-                </Card>
               ))}
             </div>
-          </div>
+          </CardContent>
+        </Card>
+
+        {achievements && achievements.length > 0 && (
+          <Card>
+            <CardContent className="pt-6">
+              <h2 className="text-xl font-semibold mb-6">Achievements</h2>
+              <div className="grid gap-4 md:grid-cols-3">
+                {achievements.map((achievement: Achievement) => (
+                  <div key={achievement.id} className="p-4 bg-gray-50 rounded-lg">
+                    <h3 className="font-semibold text-lg mb-2">{achievement.title}</h3>
+                    <p className="text-gray-600 text-sm mb-2">{achievement.description}</p>
+                    <p className="text-gray-400 text-xs">
+                      {new Date(achievement.awarded_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
       </div>
     </main>
