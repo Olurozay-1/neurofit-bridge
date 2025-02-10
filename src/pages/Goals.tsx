@@ -187,12 +187,12 @@ const Goals = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-[#0EA5E9] mb-2">My Goals</h1>
+            <h1 className="text-3xl font-bold text-blue-600 mb-2">My Goals</h1>
             <p className="text-gray-600">Track your progress and celebrate achievements</p>
           </div>
           <Dialog open={newGoalOpen} onOpenChange={setNewGoalOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-[#0EA5E9] hover:bg-[#0EA5E9]/90">
+              <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="mr-2 h-4 w-4" /> Add New Goal
               </Button>
             </DialogTrigger>
@@ -227,7 +227,7 @@ const Goals = () => {
                     onChange={(e) => setNewGoal({ ...newGoal, target_count: parseInt(e.target.value) })}
                   />
                 </div>
-                <Button onClick={handleNewGoal} className="w-full bg-[#0EA5E9] hover:bg-[#0EA5E9]/90">Create Goal</Button>
+                <Button onClick={handleNewGoal} className="w-full bg-blue-600 hover:bg-blue-700">Create Goal</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -251,7 +251,7 @@ const Goals = () => {
                       onClick={() => handleProgress(goal.id, goal.current_count, goal.target_count)}
                       disabled={goal.current_count >= goal.target_count}
                     >
-                      <Target className="h-5 w-5 text-[#0EA5E9]" />
+                      <Target className="h-5 w-5 text-blue-600" />
                     </Button>
                   </div>
                   <Progress value={(goal.current_count / goal.target_count) * 100} className="h-2" />
