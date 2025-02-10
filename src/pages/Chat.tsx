@@ -85,12 +85,12 @@ export default function Chat() {
         </ScrollArea>
 
         <div className="p-4 border-t space-y-4">
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex-1 bg-green-500 hover:bg-green-600 text-white">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button variant="outline" className="w-full sm:flex-1 bg-green-500 hover:bg-green-600 text-white">
               <Upload className="h-4 w-4 mr-2" />
               Upload Exercise Video
             </Button>
-            <Button variant="outline" className="flex-1 bg-purple-500 hover:bg-purple-600 text-white">
+            <Button variant="outline" className="w-full sm:flex-1 bg-purple-500 hover:bg-purple-600 text-white">
               <Mic className="h-4 w-4 mr-2" />
               Record Voice Message
             </Button>
