@@ -75,8 +75,8 @@ export default function Chat() {
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl h-full flex flex-col">
-        <div className="text-center mb-2">
-          <h1 className="text-[28px] font-bold text-[#1A56DB] mb-1">
+        <div className="text-center pt-4 mb-1">
+          <h1 className="text-[28px] font-bold text-[#1A56DB] mb-0.5">
             How can I help you today?
           </h1>
           <p className="text-gray-600 text-base max-w-xl mx-auto">
@@ -84,9 +84,9 @@ export default function Chat() {
           </p>
         </div>
 
-        <div className="flex-1 min-h-0 mb-2">
+        <div className="flex-1 min-h-0 mb-1">
           <ScrollArea className="h-full px-2">
-            <div className="space-y-3">
+            <div className="space-y-2">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -123,7 +123,7 @@ export default function Chat() {
           </ScrollArea>
         </div>
 
-        <div className="mt-auto space-y-3 py-2 bg-white">
+        <div className="mt-auto space-y-2 py-2 bg-white">
           <div className="grid grid-cols-2 gap-3">
             <Button 
               variant="outline" 
