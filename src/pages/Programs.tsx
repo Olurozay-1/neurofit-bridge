@@ -9,8 +9,28 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { CreateProgramForm } from "@/components/programs/CreateProgramForm"
+import { useQuery } from "@tanstack/react-query"
+import { supabase } from "@/integrations/supabase/client"
+import { useNavigate } from "react-router-dom"
 
 export default function Programs() {
+  const navigate = useNavigate()
+
+  const { data: bioData, isLoading } = useQuery({
+    queryKey: ["bio"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("user_bios")
+        .select("*")
+        .maybeSingle()
+
+      if (error) throw error
+      return data
+    },
+  })
+
+  const hasBio = Boolean(bioData?.bio_summary)
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-8">
@@ -21,23 +41,39 @@ export default function Programs() {
         <CardContent className="p-8">
           <div className="space-y-4">
             <span className="text-sm font-medium uppercase tracking-wider opacity-80">
-              Recommended
+              {hasBio ? "Recommended" : "Get Started"}
             </span>
-            <h2 className="text-2xl font-semibold">Daily Mobility Program</h2>
-            <p className="text-blue-100">Customized for your recovery goals</p>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50">
-                  Create Program
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
-                <DialogHeader>
-                  <DialogTitle>Create New Program</DialogTitle>
-                </DialogHeader>
-                <CreateProgramForm />
-              </DialogContent>
-            </Dialog>
+            <h2 className="text-2xl font-semibold">
+              {hasBio ? "Daily Mobility Program" : "Complete Your Health Bio"}
+            </h2>
+            <p className="text-blue-100">
+              {hasBio 
+                ? "Customized for your recovery goals"
+                : "Complete your Health Bio so we can learn more about you and create tailored plans and answer questions with context."}
+            </p>
+            {hasBio ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50">
+                    Create Program
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[600px]">
+                  <DialogHeader>
+                    <DialogTitle>Create New Program</DialogTitle>
+                  </DialogHeader>
+                  <CreateProgramForm />
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <Button 
+                variant="secondary" 
+                className="bg-white text-blue-600 hover:bg-blue-50"
+                onClick={() => navigate("/bio")}
+              >
+                Complete Health Bio
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
