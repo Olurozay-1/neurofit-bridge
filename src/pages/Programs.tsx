@@ -124,7 +124,7 @@ export default function Programs() {
         {!hasBio ? (
           <div className="text-center py-8">
             <p className="text-gray-600">
-              Complete your Health Bio so we can learn more about you and create tailored plans and answer questions with context.
+              Complete Your Health Bio For Tailored Exercises
             </p>
           </div>
         ) : (
