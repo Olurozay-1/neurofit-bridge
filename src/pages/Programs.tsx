@@ -66,22 +66,6 @@ export default function Programs() {
     enabled: Boolean(bioData?.bio_summary),
   })
 
-  const { data: quote } = useQuery({
-    queryKey: ["daily_quote"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("daily_quotes")
-        .select("*")
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
-      if (error) throw error
-      return data
-    },
-    enabled: Boolean(bioData?.bio_summary),
-  })
-
   const hasBio = Boolean(bioData?.bio_summary)
   const hasProgram = Boolean(recommendations)
 
@@ -102,7 +86,6 @@ export default function Programs() {
         </DialogTrigger>
         <ProgramRecommendationsDialog 
           recommendations={recommendations}
-          quote={quote}
         />
       </Dialog>
 
@@ -125,5 +108,5 @@ export default function Programs() {
         />
       </div>
     </div>
-  )
+  );
 }
