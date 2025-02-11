@@ -86,6 +86,7 @@ export default function Programs() {
         </DialogTrigger>
         <ProgramRecommendationsDialog 
           recommendations={recommendations}
+          quote={null}
         />
       </Dialog>
 
