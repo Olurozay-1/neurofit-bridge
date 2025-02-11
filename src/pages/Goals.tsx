@@ -18,15 +18,17 @@ const Goals = () => {
       <DailyQuote />
 
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-blue-600 mb-2">My Goals</h1>
-            <p className="text-gray-600">Track your progress and celebrate achievements</p>
-          </div>
-          <CreateGoalDialog onGoalCreated={() => refetchGoals()} />
+        <div>
+          <h1 className="text-3xl font-bold text-blue-600 mb-2">My Goals</h1>
+          <p className="text-gray-600">Track your progress and celebrate achievements</p>
         </div>
 
         <GoalList onGoalUpdate={() => refetchGoals()} />
+        
+        <div className="flex justify-end">
+          <CreateGoalDialog onGoalCreated={() => refetchGoals()} />
+        </div>
+        
         <AchievementList />
       </div>
     </main>
