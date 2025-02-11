@@ -64,13 +64,18 @@ export const DailyQuote = () => {
       return newQuote
     },
     retry: 1,
-    onError: (error) => {
-      console.error('Error in daily quote query:', error)
-      toast({
-        title: "Failed to load daily quote",
-        description: "Please try refreshing the page",
-        variant: "destructive"
-      })
+    meta: {
+      errorMessage: "Failed to load daily quote"
+    },
+    onSettled: (data, error) => {
+      if (error) {
+        console.error('Error in daily quote query:', error)
+        toast({
+          title: "Failed to load daily quote",
+          description: "Please try refreshing the page",
+          variant: "destructive"
+        })
+      }
     }
   })
 
