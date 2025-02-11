@@ -20,26 +20,41 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         messages: [
           {
             role: 'system',
-            content: 'You are a motivational coach. Generate a short, impactful daily motivational quote (max 100 characters).'
+            content: 'You are a motivational coach. Generate a short, impactful daily motivational quote (max 100 characters). Be direct and inspiring.'
           },
           {
             role: 'user',
             content: 'Generate a motivational quote for today.'
           }
         ],
+        temperature: 0.7,
+        max_tokens: 60,
       }),
     })
 
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('OpenAI API error:', error)
+      throw new Error('Failed to generate quote')
+    }
+
     const data = await response.json()
+    
+    if (!data.choices?.[0]?.message?.content) {
+      console.error('Unexpected OpenAI response format:', data)
+      throw new Error('Invalid response format from OpenAI')
+    }
+
     return new Response(
       JSON.stringify({ quote: data.choices[0].message.content }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {
+    console.error('Error in generate-quote function:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

@@ -3,9 +3,11 @@ import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { Card, CardContent } from "@/components/ui/card"
 import { CircleDot } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 export const DailyQuote = () => {
-  const { data: dailyQuote } = useQuery({
+  const { toast } = useToast()
+  const { data: dailyQuote, isError } = useQuery({
     queryKey: ["dailyQuote"],
     queryFn: async () => {
       const { data: { session } } = await supabase.auth.getSession()
@@ -13,6 +15,7 @@ export const DailyQuote = () => {
 
       const today = new Date().toISOString().split('T')[0]
       
+      // First try to get an existing quote for today
       const { data: existingQuote } = await supabase
         .from('daily_quotes')
         .select('quote')
@@ -21,18 +24,31 @@ export const DailyQuote = () => {
         .maybeSingle()
 
       if (existingQuote) {
+        console.log('Found existing quote:', existingQuote)
         return existingQuote.quote
       }
 
+      // If no existing quote, generate a new one
+      console.log('Generating new quote...')
       const response = await fetch('/api/generate-quote', {
+        method: 'GET',
         headers: {
-          Authorization: `Bearer ${session.access_token}`
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
         }
       })
       
+      if (!response.ok) {
+        const error = await response.json()
+        console.error('Error generating quote:', error)
+        throw new Error('Failed to generate quote')
+      }
+
       const { quote: newQuote } = await response.json()
+      console.log('Generated new quote:', newQuote)
       
-      await supabase
+      // Store the new quote
+      const { error: insertError } = await supabase
         .from('daily_quotes')
         .insert({
           quote: newQuote,
@@ -40,11 +56,25 @@ export const DailyQuote = () => {
           date: today
         })
 
+      if (insertError) {
+        console.error('Error storing quote:', insertError)
+        throw new Error('Failed to store quote')
+      }
+
       return newQuote
+    },
+    retry: 1,
+    onError: (error) => {
+      console.error('Error in daily quote query:', error)
+      toast({
+        title: "Failed to load daily quote",
+        description: "Please try refreshing the page",
+        variant: "destructive"
+      })
     }
   })
 
-  if (!dailyQuote) return null
+  if (isError || !dailyQuote) return null
 
   return (
     <Card className="mb-8 bg-gray-50">
