@@ -44,30 +44,6 @@ export type Database = {
           },
         ]
       }
-      daily_quotes: {
-        Row: {
-          created_at: string
-          date: string
-          id: string
-          quote: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          date?: string
-          id?: string
-          quote: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          date?: string
-          id?: string
-          quote?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       exercises: {
         Row: {
           created_at: string
