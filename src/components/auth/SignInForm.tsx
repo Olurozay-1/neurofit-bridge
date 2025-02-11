@@ -76,7 +76,7 @@ export function SignInForm({ setIsLoading, isLoading }: SignInFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-blue-600">Email</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -89,7 +89,7 @@ export function SignInForm({ setIsLoading, isLoading }: SignInFormProps) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="text-blue-600">Password</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>

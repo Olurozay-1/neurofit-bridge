@@ -95,7 +95,7 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>First Name</FormLabel>
+                <FormLabel className="text-blue-600">First Name</FormLabel>
                 <FormControl>
                   <Input placeholder="John" {...field} />
                 </FormControl>
@@ -108,7 +108,7 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Last Name</FormLabel>
+                <FormLabel className="text-blue-600">Last Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Doe" {...field} />
                 </FormControl>
@@ -122,7 +122,7 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Role</FormLabel>
+              <FormLabel className="text-blue-600">Role</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -144,7 +144,7 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
             name="practiceName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Practice Name</FormLabel>
+                <FormLabel className="text-blue-600">Practice Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter practice name" {...field} />
                 </FormControl>
@@ -158,7 +158,7 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-blue-600">Email</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -171,7 +171,7 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="text-blue-600">Password</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
@@ -181,7 +181,7 @@ export function SignUpForm({ setIsLoading, isLoading }: SignUpFormProps) {
         />
         <Button 
           type="submit" 
-          className="w-full bg-[#1EAEDB] hover:bg-[#0FA0CE] text-white" 
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white" 
           disabled={isLoading}
         >
           {isLoading ? <div className="animate-spin">↻</div> : "Sign Up"}
