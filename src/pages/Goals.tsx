@@ -1,6 +1,5 @@
 
 import { useQuery } from "@tanstack/react-query"
-import { DailyQuote } from "@/components/goals/DailyQuote"
 import { CreateGoalDialog } from "@/components/goals/CreateGoalDialog"
 import { GoalList } from "@/components/goals/GoalList"
 import { AchievementList } from "@/components/goals/AchievementList"
@@ -15,8 +14,6 @@ const Goals = () => {
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
-      <DailyQuote />
-
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-blue-600 mb-2">My Goals</h1>
